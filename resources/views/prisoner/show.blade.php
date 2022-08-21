@@ -3,6 +3,107 @@
     @section('custom_css')
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noto+Nastaliq+Urdu">
         <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet"/>
+
+        <style>
+            @media screen {
+                #hideOnScreen {
+                    display: none;
+                    width: 1200px;
+                    background-color: white;
+                    padding: 20px;
+                    /*display: block;*/
+                    border: 1px solid black;
+                    margin: auto;
+                    height: 900px;
+                }
+
+                /*#one, #two, #three {*/
+                /*    float: left;*/
+                /*    width: 33.33%;*/
+                /*    height: 100px;*/
+                /*}*/
+
+                /*#one h1 {*/
+                /*    font-size: 18px;*/
+                /*    text-align: center;*/
+                /*    font-weight: bold;*/
+                /*}*/
+
+                /*#three h1 {*/
+                /*    font-size: 18px;*/
+                /*    text-align: center;*/
+                /*    font-weight: bold;*/
+                /*}*/
+
+                /*#one p {*/
+                /*    font-weight: bold;*/
+                /*}*/
+                /*#three p {*/
+                /*    font-weight: bold;*/
+                /*}*/
+
+
+                /*table, td, th {*/
+                /*    border: 1px solid;*/
+                /*    padding-left: 10px;*/
+                /*    padding-top: 5px;*/
+                /*}*/
+
+                /*table {*/
+                /*    width: 100%;*/
+                /*    border-collapse: collapse;*/
+                /*}*/
+            }
+
+            @media print {
+                #hideOnScreen {
+                    width: 800px;
+                    background-color: white;
+                    padding: 10px;
+                    display: block;
+                    /*border: 1px solid black;*/
+                    margin: auto;
+                    height: 950px;
+                }
+
+                #one, #two, #three {
+                    float: left;
+                    width: 33.33%;
+                    height: 100px;
+                }
+
+                #one h1 {
+                    font-size: 18px;
+                    text-align: center;
+                    font-weight: bold;
+                }
+
+                #three h1 {
+                    font-size: 18px;
+                    text-align: center;
+                    font-weight: bold;
+                }
+
+                #one p {
+                   font-weight: bold;
+                }
+                #three p {
+                    font-weight: bold;
+                }
+
+                table, td, th {
+                    border: 1px solid;
+                    padding-left: 10px;
+                    padding-right: 2px;
+                    padding-top: 5px;
+                }
+
+                table {
+                    width: 100%;
+                    border-collapse: collapse;
+                }
+            }
+        </style>
     @endsection
 
     <x-slot name="header" class="print:hidden">
@@ -32,12 +133,149 @@
                 <span class="hidden md:inline-block ml-2">Add Prisoner Shifting</span>
             </a>
 
+            <button  onclick="window.print()"
+               class="flex items-center px-4 py-2 text-gray-600 bg-white border rounded-lg focus:outline-none hover:bg-gray-100 transition-colors duration-200 transform dark:text-gray-200 dark:border-gray-200  dark:hover:bg-gray-700 ml-2"
+               title="Members List">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
+                </svg>
+            </button>
+
         </div>
 
     </x-slot>
 
     <div class="py-2">
-        <div class="bg-gray-100" style="height: 1800px;" >
+
+        <div class="bg-gray-100" id="hideOnScreen">
+            <div id="one">
+                <h1>Embassy of Pakistan Riyadh,<br>Saudi Arabia</h1>
+                <p>Community Welfare wing</p>
+                <p>Prisoner's information</p>
+
+            </div>
+            <div id="two">
+                <img src="{{Storage::url('logo.png')}}" style="height: 100px; display: block;margin-left: auto;margin-right: auto;" alt="">
+            </div>
+            <div id="three" style="direction: rtl;">
+
+                <h1>
+                    سفارت خانہ پاکستان ریاض،
+                    <br>
+                    سعودی عرب
+                </h1>
+                <p>
+                    شعبہ کمیونٹی ویلفیئر
+                </p>
+                <p>
+                    قیدی کی معلومات
+                </p>
+            </div>
+            <br>
+            <br>
+            <br>
+{{--            <hr style="border: 1px solid black; margin-top: 50px;">--}}
+            <br>
+            <br>
+
+            <table>
+                <tr>
+                    <th colspan="4">Date: {{date('d-m-Y')}} تاریخ </th>
+
+                </tr>
+                <tr>
+                    <td>Name & father's name:</td>
+                    <td colspan="3">{{$prisoner->name_and_father_name}}</td>
+                </tr>
+                <tr>
+                    <td>Passport: 	</td>
+                    <td>{{$prisoner->passport_no}}</td>
+                    <td>Iqama: 	</td>
+                    <td>{{$prisoner->iqama_no}}</td>
+                </tr>
+
+                <tr>
+                    <td>Detention Authority:</td>
+                    <td>{{$prisoner->detention_authority}}</td>
+                    <td>Region:</td>
+                    <td>{{$prisoner->region}}</td>
+                </tr>
+
+                <tr>
+                    <td>Detention City:	</td>
+                    <td>{{$prisoner->detention_city}}</td>
+                    <td>Prison:</td>
+                    <td>{{$prisoner->prison}}</td>
+                </tr>
+
+
+                <tr>
+                    <td>Date of Detention Hijri:</td>
+                    <td>{{$prisoner->hijri_detention_date}}</td>
+                    <td>Date of Detention GG:</td>
+                    <td>{{$prisoner->gregorian_detention_date}}</td>
+                </tr>
+
+
+                <tr>
+                    <td>Charges / Crime:</td>
+                    <td>
+                        @if($prisoner->prisoner_charges->isNotEmpty())
+                            @foreach($prisoner->prisoner_charges as $charges)
+                                {{$charges->crime_charges}},
+                            @endforeach
+                        @endif
+                    </td>
+                    <td>Sentence:</td>
+                    <td>{{$prisoner->status}}</td>
+                </tr>
+
+
+                <tr>
+                    <td>Detention Period:</td>
+                    <td>
+                        @if(!empty($prisoner->gregorian_detention_date))
+                            {{\Carbon\Carbon::parse($prisoner->gregorian_detention_date)->diff(\Carbon\Carbon::now())->format('%y years, %m months and %d days')}}
+                        @endif
+                    </td>
+                    <td>Expected Release Date:</td>
+                    <td>
+                        @if(!empty($prisoner->expected_release_date))
+                            {{\Carbon\Carbon::parse($prisoner->expected_release_date)->format('d-m-Y')}}
+                        @endif
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>Financial claim:</td>
+                    <td>{{number_format($prisoner->financial_claim,2)}}</td>
+                    <td>Penalty / Fine:</td>
+                    <td>{{number_format($prisoner->penalty_fine,2)}}</td>
+                </tr>
+
+
+                <tr>
+                    <td>Case closing date</td>
+                    <td>
+                        @if(!empty($prisoner->case_closing_date_gg))
+                            {{\Carbon\Carbon::parse($prisoner->case_closing_date_gg)->format('d-m-Y')}}
+                        @endif
+                    </td>
+                    <td>Closing reason</td>
+                    <td>{{$prisoner->case_closing_reason}}</td>
+                </tr>
+            </table>
+
+            <br>
+            Note:  <br><br>
+            <hr style="border: 1px solid black; ">
+            <hr style="border: 1px solid black; margin-top: 50px; ">
+            <hr style="border: 1px solid black; margin-top: 50px; ">
+            <hr style="border: 1px solid black; margin-top: 50px; ">
+            <hr style="border: 1px solid black; margin-top: 50px; ">
+            <hr style="border: 1px solid black; margin-top: 50px; ">
+        </div>
+        <div class="bg-gray-100 print:hidden" style="height: 1800px;">
             <div class="container mx-auto my-5 p-5">
                 <div class="md:flex no-wrap md:-mx-2 ">
                     <!-- Left Side -->
@@ -151,7 +389,7 @@
                                     <div class="grid grid-cols-2">
                                         <div class="px-4 py-2 font-semibold">Iqama Number</div>
                                         <div class="px-4 py-2">{{$prisoner->iqama_no}}
-<br>
+                                            <br>
                                             @if(!empty($prisoner->iqama))
                                                 <a href="{{Storage::url($prisoner->iqama)}}" target="_blank" class="text-blue-700 hover:underline">View Iqama</a>
                                             @endif
@@ -165,7 +403,7 @@
                                         <div class="px-4 py-2 font-semibold">Passport number</div>
                                         <div class="px-4 py-2">{{$prisoner->passport_no}}
 
-                                        <br>
+                                            <br>
                                             @if(!empty($prisoner->passport))
                                                 <a href="{{Storage::url($prisoner->passport)}}" target="_blank" class="text-blue-700 hover:underline">View Passport</a>
                                             @endif
@@ -256,9 +494,6 @@
                                         <div class="px-4 py-2 font-semibold">Penalty / Fine</div>
                                         <div class="px-4 py-2">{{$prisoner->penalty_fine}}</div>
                                     </div>
-
-
-
 
 
                                 </div>
@@ -417,7 +652,6 @@
                                 </div>
                             </div>
                         </div>
-
 
 
                         <!-- End of Experience and education grid -->
