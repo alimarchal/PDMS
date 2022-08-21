@@ -5,12 +5,12 @@
         <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet"/>
     @endsection
 
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight inline-block">
+    <x-slot name="header" class="print:hidden">
+        <h2 class="font-semibold text-xl text-gray-800 leading-tight inline-block print:hidden">
             Prisoner Profile
         </h2>
 
-        <div class="flex justify-center items-center float-right">
+        <div class="flex justify-center items-center float-right print:hidden">
 
             <a href="{{route('prisoner.assistance', $prisoner->id)}}"
                class="flex items-center px-4 py-2 text-gray-600 bg-white border rounded-lg focus:outline-none hover:bg-gray-100 transition-colors duration-200 transform dark:text-gray-200 dark:border-gray-200  dark:hover:bg-gray-700 ml-2"

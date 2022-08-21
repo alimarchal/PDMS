@@ -20,7 +20,9 @@ Route::get('/', function () {
 Route::middleware(['auth:sanctum',config('jetstream.auth_session'),'verified'])->group(function () {
 
     Route::get('dashboard',[\App\Http\Controllers\PrisonerController::class,'dashboard'])->name('dashboard');
+    Route::get('prisoner/export', [\App\Http\Controllers\PrisonerController::class, 'export'])->name('prisoner.export');
     Route::resource('prisoner',\App\Http\Controllers\PrisonerController::class);
+
     Route::resource('prison',\App\Http\Controllers\JailOfficialController::class);
     Route::get('prisoner/{prisoner}/prisionerShifted/create',[\App\Http\Controllers\PrisionerShiftedController::class,'create'])->name('prisionerShifted.create');
 

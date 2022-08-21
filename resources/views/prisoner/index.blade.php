@@ -34,6 +34,30 @@
                 <span class="hidden md:inline-block ml-2">Search Filters</span>
             </a>
 
+
+            @php
+                $search_string = null;
+                $cnic = null;
+                $passport_no = null;
+                $iqama_no = null;
+                $status = null;
+                empty(request()->get('filter')['search_string']) ? $search_string = null: $search_string = request()->get('filter')['search_string'];
+                empty(request()->get('filter')['cnic']) ? $cnic = null: $cnic = request()->get('filter')['cnic'];
+                empty(request()->get('filter')['passport_no']) ? $passport_no = null: $passport_no = request()->get('filter')['passport_no'];
+                empty(request()->get('filter')['iqama_no']) ? $iqama_no = null: $iqama_no = request()->get('filter')['iqama_no'];
+                empty(request()->get('filter')['status']) ? $status = null: $status = request()->get('filter')['status'];
+            @endphp
+
+            <a href="{{route('prisoner.export',['filter[search_string]' => $search_string,'filter[cnic]' => $cnic,'filter[passport_no]' => $passport_no,'filter[iqama_no]' => $iqama_no,'filter[status]' => $status])}}"
+               class="flex items-center px-4 py-2 text-gray-600 bg-white border rounded-lg focus:outline-none hover:bg-gray-100 transition-colors duration-200 transform dark:text-gray-200 dark:border-gray-200  dark:hover:bg-gray-700 ml-2"
+               title="Download in Excel File">
+
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
+                </svg>
+            </a>
+
+
         </div>
     </x-slot>
 

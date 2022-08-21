@@ -11,9 +11,16 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
+use App\Exports\PrisonersExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class PrisonerController extends Controller
 {
+
+    public function export()
+    {
+        return Excel::download(new PrisonersExport, 'PrisonersExport.xlsx');
+    }
 
     public function dashboard()
     {
@@ -175,6 +182,10 @@ class PrisonerController extends Controller
                 AllowedFilter::exact('passport_no'),
                 AllowedFilter::exact('iqama_no')
             ])->latest()->paginate(50)->withQueryString();
+
+
+
+
         return view('prisoner.index', compact('prisoner'));
     }
 
