@@ -211,9 +211,14 @@
 
                 <tr>
                     <td>Date of Detention Hijri:</td>
-                    <td>{{$prisoner->hijri_detention_date}}</td>
+                    <td>
+                        {{$prisoner->hijri_detention_date}}</td>
                     <td>Date of Detention GG:</td>
-                    <td>{{$prisoner->gregorian_detention_date}}</td>
+                    <td>
+                        @if(!empty($prisoner->gregorian_detention_date))
+                            {{\Carbon\Carbon::parse($prisoner->gregorian_detention_date)->format('d-m-Y')}}
+                        @endif
+                    </td>
                 </tr>
 
 
