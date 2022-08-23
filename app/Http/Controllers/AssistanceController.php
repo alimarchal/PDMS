@@ -22,6 +22,7 @@ class AssistanceController extends Controller
         $prison = QueryBuilder::for(Assistance::class)
             ->allowedFilters([
                 AllowedFilter::scope('search_string'),
+                AllowedFilter::scope('search_assistance'),
                 AllowedFilter::exact('prisoner_id'),
                 AllowedFilter::exact('type'),
             ])->latest()->paginate(50)->withQueryString();

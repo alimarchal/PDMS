@@ -11,10 +11,12 @@
     <div class="py-6">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="grid grid-cols-12 gap-6 ">
-                <a href="#" class="transform  hover:scale-105 transition duration-300 shadow-xl rounded-lg col-span-12 sm:col-span-6 xl:col-span-3 intro-y bg-white">
+                <a href="{{route('prisoner.index',['filter[search_date]' => \Carbon\Carbon::now()->format('Y-m-d')])}}" class="transform  hover:scale-105 transition duration-300 shadow-xl rounded-lg col-span-12 sm:col-span-6 xl:col-span-3 intro-y bg-white">
 
                     <div class="p-5">
                         <div class="grid grid-cols-3 gap-1">
+{{--                            'filter[search_date]' => $search_date--}}
+{{--                            <a href=""></a>--}}
                             <div class="col-span-2">
                                 <div class="text-3xl font-bold leading-8">{{$prisoners_arrested_in_last_3_months}}</div>
 
@@ -29,7 +31,7 @@
                         </div>
                     </div>
                 </a>
-                <a href="#" class="transform  hover:scale-105 transition duration-300 shadow-xl rounded-lg col-span-12 sm:col-span-6 xl:col-span-3 intro-y bg-white">
+                <a href="{{route('prisoner.index',['filter[search_released]' => \Carbon\Carbon::now()->format('Y-m-d')])}}" class="transform  hover:scale-105 transition duration-300 shadow-xl rounded-lg col-span-12 sm:col-span-6 xl:col-span-3 intro-y bg-white">
                     <div class="p-5">
                         <div class="grid grid-cols-3 gap-1">
                             <div class="col-span-2">
@@ -44,7 +46,7 @@
                         </div>
                     </div>
                 </a>
-                <a href="#" class="transform  hover:scale-105 transition duration-300 shadow-xl rounded-lg col-span-12 sm:col-span-6 xl:col-span-3 intro-y bg-white">
+                <a href="{{route('assistance.index',['filter[search_assistance]' => \Carbon\Carbon::now()->format('Y-m-d')])}}" class="transform  hover:scale-105 transition duration-300 shadow-xl rounded-lg col-span-12 sm:col-span-6 xl:col-span-3 intro-y bg-white">
                     <div class="p-5">
                         <div class="grid grid-cols-3 gap-1">
                             <div class="col-span-2">
@@ -63,7 +65,7 @@
                         </div>
                     </div>
                 </a>
-                <a href="#" class="transform  hover:scale-105 transition duration-300 shadow-xl rounded-lg col-span-12 sm:col-span-6 xl:col-span-3 intro-y bg-white">
+                <a href="{{route('prisoner.index',['filter[search_expected]' => \Carbon\Carbon::now()->format('Y-m-d')])}}" class="transform  hover:scale-105 transition duration-300 shadow-xl rounded-lg col-span-12 sm:col-span-6 xl:col-span-3 intro-y bg-white">
 
                     <div class="p-5">
                         <div class="grid grid-cols-3 gap-1">

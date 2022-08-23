@@ -35,12 +35,19 @@ class PrisonersExport implements FromCollection, WithHeadings, ShouldAutoSize
         return QueryBuilder::for(Prisoner::with('prisoner_charges', 'prisoner_shifting'))
             ->allowedFilters([
                 AllowedFilter::scope('search_string'),
+                AllowedFilter::scope('search_date'),
+                AllowedFilter::scope('search_released'),
+                AllowedFilter::scope('search_expected'),
+                AllowedFilter::scope('search_from'),
                 AllowedFilter::exact('cnic'),
                 AllowedFilter::exact('status'),
-                AllowedFilter::exact('status'),
+                AllowedFilter::exact('detention_authority'),
                 AllowedFilter::exact('region'),
+                AllowedFilter::exact('detention_city'),
                 AllowedFilter::exact('prison'),
                 AllowedFilter::exact('passport_no'),
+                AllowedFilter::exact('case_closing_reason'),
+                AllowedFilter::exact('case_closed'),
                 AllowedFilter::exact('iqama_no')
             ])->latest()->get(['name_and_father_name', 'arabic_name', 'iqama_no', 'passport_no', 'detention_authority', 'region', 'detention_city',
                 'prison', 'gender', 'cnic', 'hijri_detention_date', 'gregorian_detention_date', 'crime_charges', 'case_details', 'sentence_in_years',

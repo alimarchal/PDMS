@@ -31,7 +31,7 @@ class PrisonerController extends Controller
         $total_prisoners_crime_wise = [];
         $total_prisoners_security_case = [
             'Security case' => 0,
-            'Non Security case' => 0,
+//            'Non Security case' => 0,
         ];
 
 
@@ -49,9 +49,9 @@ class PrisonerController extends Controller
 
         $query_total_prisoners = DB::table('prisoners')->select('status', DB::raw("count(*) as total"))->groupBy('status')->get();
 
-        $query_total_prisoners_region_wise = DB::table('prisoners')->select('region', DB::raw("COUNT(*) as total"))->groupBy('region')->get();
+        $query_total_prisoners_region_wise = DB::table('prisoners')->select('region', DB::raw("COUNT(*) as total"))->whereNotIn('prisoners.case_closing_reason', ['Deported', 'Released', 'Executed', 'Unknown'])->where('prisoners.status', '!=', 'Released')->groupBy('region')->get();
 
-        $query_total_prisoners_crime_wise = DB::table('prisoners')->select('prisoner_charges.crime_charges', DB::raw("COUNT('prisoner_charges.crime_charges') as total"))->join('prisoner_charges', 'prisoners.id', '=', 'prisoner_charges.prisoner_id')->where('prisoners.status', '!=', 'Released')->groupBy('prisoner_charges.crime_charges')->get();
+        $query_total_prisoners_crime_wise = DB::table('prisoners')->select('prisoner_charges.crime_charges', DB::raw("COUNT('prisoner_charges.crime_charges') as total"))->join('prisoner_charges', 'prisoners.id', '=', 'prisoner_charges.prisoner_id')->where('prisoners.status', '!=', 'Released')->whereNotIn('prisoners.case_closing_reason', ['Deported', 'Released', 'Executed', 'Unknown'])->groupBy('prisoner_charges.crime_charges')->get();
 
         foreach ($query_total_prisoners as $item) {
             $total_prisoners[$item->status] = $item->total;
@@ -76,12 +76,12 @@ class PrisonerController extends Controller
             ];
         }
 
-
         $dateS = Carbon::now()->subMonth(3);
         $dateE = Carbon::now();
 
         DB::enableQueryLog();
         $prisoners_arrested_in_last_3_months = DB::table('prisoners')->select(DB::raw("count(*) as total"))
+            ->whereNotIn('prisoners.case_closing_reason', ['Deported', 'Released', 'Executed', 'Unknown'])
             ->whereBetween('gregorian_detention_date', [$dateS->format('Y-m-d'), $dateE->format('Y-m-d')])
             ->first()->total;
 
@@ -94,11 +94,12 @@ class PrisonerController extends Controller
         $dateStart = Carbon::now();
         $dateEnd = Carbon::now()->addMonth(3);
         $prisoners_to_be_released_in_3_months = DB::table('prisoners')->select(DB::raw("count(*) as total"))
+            ->whereNotIn('prisoners.case_closing_reason', ['Deported', 'Released', 'Executed', 'Unknown'])
             ->whereBetween('expected_release_date', [$dateStart->format('Y-m-d'), $dateEnd->format('Y-m-d')])
             ->first()->total;
 
 
-        $financial_claim = DB::table('prisoners')->select(DB::raw("SUM(IF(financial_claim < 10001,financial_claim,0)) as 'under_10000',SUM(IF(financial_claim BETWEEN 10001 and 50000,financial_claim,0)) as 'from_10001_50000',SUM(IF(financial_claim BETWEEN 50001 and 75000,financial_claim,0)) as 'from_50001_75000',SUM(IF(financial_claim BETWEEN 75001 and 100000,financial_claim,0)) as 'from_75001_100000',SUM(IF(financial_claim BETWEEN 100001 and 1000000,financial_claim,0)) as 'from_100001_1000000'"))->get();
+        $financial_claim = DB::table('prisoners')->select(DB::raw("SUM(IF(financial_claim < 10001,financial_claim,0)) as 'under_10000',SUM(IF(financial_claim BETWEEN 10001 and 50000,financial_claim,0)) as 'from_10001_50000',SUM(IF(financial_claim BETWEEN 50001 and 75000,financial_claim,0)) as 'from_50001_75000',SUM(IF(financial_claim BETWEEN 75001 and 100000,financial_claim,0)) as 'from_75001_100000',SUM(IF(financial_claim BETWEEN 100001 and 1000000,financial_claim,0)) as 'from_100001_1000000'"))->where('prisoners.status', '!=', 'Released')->get();
 
         $financial_claim_data = [
             'Under 10000' => $financial_claim[0]->under_10000,
@@ -120,18 +121,21 @@ class PrisonerController extends Controller
 
         $delay_after_completion_one_year = DB::table('prisoners')->select(DB::raw("count(*) as total"))
             ->where('status','!=','Released')
+            ->where('case_closing_reason', '!=' ,'Deported')
             ->whereBetween('expected_release_date', [$dateStartOneYear->format('Y-m-d'), $dateEndOneYear->format('Y-m-d')])
             ->first()->total;
 
 
         $delay_after_completion_two_year = DB::table('prisoners')->select(DB::raw("count(*) as total"))
             ->where('status','!=','Released')
+            ->where('case_closing_reason', '!=' ,'Deported')
             ->whereBetween('expected_release_date', [$dateStartTwoYear->format('Y-m-d'), $dateEndTwoYear->format('Y-m-d')])
             ->first()->total;
 
 
         $delay_after_completion_n_year = DB::table('prisoners')->select(DB::raw("count(*) as total"))
             ->where('status','!=','Released')
+            ->where('case_closing_reason', '!=' ,'Deported')
             ->whereBetween('expected_release_date', [$dateStartNYear->format('Y-m-d'), $dateEndNYear->format('Y-m-d')])
             ->first()->total;
 
@@ -146,7 +150,7 @@ class PrisonerController extends Controller
         $legal_assistance = DB::table('assistances')
             ->select(DB::raw("COUNT(prisoner_id) as total"))
             ->where('type','=','Legal Assistance')
-            ->whereBetween('created_at', [$dateS->format('Y-m-d'), $dateE->format('Y-m-d')])
+            ->whereBetween('date', [$dateS->format('Y-m-d'), $dateE->format('Y-m-d')])
             ->groupBy('prisoner_id')
             ->first();
 
@@ -174,19 +178,43 @@ class PrisonerController extends Controller
         $prisoner = QueryBuilder::for(Prisoner::with('prisoner_charges', 'prisoner_shifting'))
             ->allowedFilters([
                 AllowedFilter::scope('search_string'),
+                AllowedFilter::scope('search_date'),
+                AllowedFilter::scope('search_from'),
+                AllowedFilter::scope('search_released'),
+                AllowedFilter::scope('search_expected'),
                 AllowedFilter::exact('cnic'),
                 AllowedFilter::exact('status'),
-                AllowedFilter::exact('status'),
-                AllowedFilter::exact('region'),
-                AllowedFilter::exact('prison'),
                 AllowedFilter::exact('passport_no'),
-                AllowedFilter::exact('iqama_no')
+                AllowedFilter::exact('iqama_no'),
+                AllowedFilter::exact('case_closing_reason'),
+                AllowedFilter::exact('case_closed'),
+                AllowedFilter::exact('detention_authority'),
+                AllowedFilter::exact('region'),
+                AllowedFilter::exact('detention_city'),
+                AllowedFilter::exact('prison'),
             ])->latest()->paginate(50)->withQueryString();
 
 
+        $prisoner_print = QueryBuilder::for(Prisoner::with('prisoner_charges', 'prisoner_shifting'))
+            ->allowedFilters([
+                AllowedFilter::scope('search_string'),
+                AllowedFilter::scope('search_date'),
+                AllowedFilter::scope('search_from'),
+                AllowedFilter::scope('search_released'),
+                AllowedFilter::scope('search_expected'),
+                AllowedFilter::exact('cnic'),
+                AllowedFilter::exact('detention_authority'),
+                AllowedFilter::exact('region'),
+                AllowedFilter::exact('detention_city'),
+                AllowedFilter::exact('prison'),
+                AllowedFilter::exact('status'),
+                AllowedFilter::exact('passport_no'),
+                AllowedFilter::exact('iqama_no'),
+                AllowedFilter::exact('case_closing_reason'),
+                AllowedFilter::exact('case_closed')
+            ])->get();
 
-
-        return view('prisoner.index', compact('prisoner'));
+        return view('prisoner.index', compact('prisoner','prisoner_print'));
     }
 
     /**

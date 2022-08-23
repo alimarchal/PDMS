@@ -232,7 +232,20 @@
                         @endif
                     </td>
                     <td>Sentence:</td>
-                    <td>{{$prisoner->status}}</td>
+                    <td>
+                        @if($prisoner->sentence_in_years > 1)
+                            {{$prisoner->sentence_in_years}} Years,
+                        @else
+                            {{$prisoner->sentence_in_years}} Year,
+                        @endif
+
+
+                        @if($prisoner->sentence_in_months > 1)
+                            {{$prisoner->sentence_in_months}} Months
+                        @else
+                            {{$prisoner->sentence_in_months}} Month
+                        @endif
+                    </td>
                 </tr>
 
 

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -24,6 +25,40 @@ class Prisoner extends Model
         orWhere('tehseel', 'LIKE', '%' . $search . '%')->
         orWhere('case_court_name', 'LIKE', '%' . $search . '%');
     }
+
+
+    public function scopeSearchDate(Builder $query, $search): Builder
+    {
+        $dateS = Carbon::now()->subMonth(3);
+        $dateE = Carbon::now();
+        return $query->where('case_closing_reason', '!=', 'Deported')->whereBetween('gregorian_detention_date', [$dateS->format('Y-m-d'), $dateE->format('Y-m-d')]);
+    }
+
+    //search_from
+    public function scopeSearchFrom(Builder $query, $search): Builder
+    {
+        $x = explode(' ', $search);
+        $dateS = Carbon::parse($x[0]);
+        $dateE = Carbon::parse($x[1]);
+        return $query->whereBetween('gregorian_detention_date', [$dateS->format('Y-m-d'), $dateE->format('Y-m-d')]);
+    }
+
+    public function scopeSearchReleased(Builder $query, $search): Builder
+    {
+        $dateS = Carbon::now()->subMonth(3);
+        $dateE = Carbon::now();
+        return $query->where('status', 'Released')->whereBetween('expected_release_date',
+            [$dateS->format('Y-m-d'), $dateE->format('Y-m-d')]);
+    }
+
+    public function scopeSearchExpected(Builder $query, $search): Builder
+    {
+        $dateS = Carbon::now()->addMonth(3);
+        $dateE = Carbon::now();
+
+        return $query->where('case_closing_reason', '!=', 'Deported')->whereBetween('expected_release_date', [$dateE->format('Y-m-d'), $dateS->format('Y-m-d')]);
+    }
+
 
     public $fillable = [
         'name_and_father_name',

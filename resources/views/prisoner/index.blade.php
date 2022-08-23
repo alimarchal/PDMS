@@ -3,6 +3,97 @@
     @section('custom_css')
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noto+Nastaliq+Urdu">
         <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet"/>
+        <style>
+            @media screen {
+                #hideOnScreen {
+                    display: none;
+                    width: 1200px;
+                    background-color: white;
+                    padding: 20px;
+                    /*display: block;*/
+                    border: 1px solid black;
+                    margin: auto;
+                    height: 900px;
+                }
+
+
+                table, td, th {
+                    border: 1px solid;
+                    padding-left: 10px;
+                    padding-right: 2px;
+                    padding-top: 5px;
+                }
+
+                table {
+                    width: 100%;
+                    border-collapse: collapse;
+                }
+
+                /*#one, #two, #three {*/
+                /*    float: left;*/
+                /*    width: 33.33%;*/
+                /*    height: 100px;*/
+                /*}*/
+                /*#one h1 {*/
+                /*    font-size: 18px;*/
+                /*    text-align: center;*/
+                /*    font-weight: bold;*/
+                /*}*/
+                /*#three h1 {*/
+                /*    font-size: 18px;*/
+                /*    text-align: center;*/
+                /*    font-weight: bold;*/
+                /*}*/
+                /*#one p {*/
+                /*    font-weight: bold;*/
+                /*}*/
+                /*#three p {*/
+                /*    font-weight: bold;*/
+                /*}*/
+                /*table, td, th {*/
+                /*    border: 1px solid;*/
+                /*    padding-left: 10px;*/
+                /*    padding-top: 5px;*/
+                /*}*/
+                /*table {*/
+                /*    width: 100%;*/
+                /*    border-collapse: collapse;*/
+                /*}*/
+            }
+
+            @media print {
+                #hideOnScreen {
+                    width: 800px;
+                    background-color: white;
+                    padding: 10px;
+                    display: block;
+                    /*border: 1px solid black;*/
+                    margin: auto;
+                    height: 950px;
+                }
+
+                table {
+                    page-break-inside: auto
+                }
+
+                tr {
+                    page-break-inside: avoid;
+                    page-break-after: auto
+                }
+
+                table, td, th {
+                    border: 1px solid;
+                    padding-left: 10px;
+                    padding-right: 2px;
+                    padding-top: 5px;
+                }
+
+                table {
+                    width: 100%;
+                    border-collapse: collapse;
+                }
+            }
+        </style>
     @endsection
 
     <x-slot name="header">
@@ -41,14 +132,50 @@
                 $passport_no = null;
                 $iqama_no = null;
                 $status = null;
+                $case_closing_reason = null;
+                $case_closed = null;
+                $search_date = null;
+                $search_released = null;
+                $search_expected = null;
+
+                $detention_authority = null;
+                $region = null;
+                $detention_city = null;
+                $prison = null;
+                $search_from = null;
+
                 empty(request()->get('filter')['search_string']) ? $search_string = null: $search_string = request()->get('filter')['search_string'];
                 empty(request()->get('filter')['cnic']) ? $cnic = null: $cnic = request()->get('filter')['cnic'];
                 empty(request()->get('filter')['passport_no']) ? $passport_no = null: $passport_no = request()->get('filter')['passport_no'];
                 empty(request()->get('filter')['iqama_no']) ? $iqama_no = null: $iqama_no = request()->get('filter')['iqama_no'];
                 empty(request()->get('filter')['status']) ? $status = null: $status = request()->get('filter')['status'];
+                empty(request()->get('filter')['case_closing_reason']) ? $case_closing_reason = null: $case_closing_reason = request()->get('filter')['case_closing_reason'];
+                empty(request()->get('filter')['case_closed']) ? $case_closed = null: $case_closed = request()->get('filter')['case_closed'];
+                empty(request()->get('filter')['search_date']) ? $search_date = null: $search_date = request()->get('filter')['search_date'];
+                empty(request()->get('filter')['search_released']) ? $search_released = null: $search_released = request()->get('filter')['search_released'];
+                empty(request()->get('filter')['search_expected']) ? $search_expected = null: $search_expected = request()->get('filter')['search_expected'];
+
+                empty(request()->get('filter')['detention_authority']) ? $detention_authority = null: $detention_authority = request()->get('filter')['detention_authority'];
+                empty(request()->get('filter')['region']) ? $region = null: $region = request()->get('filter')['region'];
+                empty(request()->get('filter')['detention_city']) ? $detention_city = null: $detention_city = request()->get('filter')['detention_city'];
+                empty(request()->get('filter')['prison']) ? $prison = null: $prison = request()->get('filter')['prison'];
+                empty(request()->get('filter')['search_from']) ? $search_from = null: $search_from = request()->get('filter')['search_from'];
+
+
             @endphp
 
-            <a href="{{route('prisoner.export',['filter[search_string]' => $search_string,'filter[cnic]' => $cnic,'filter[passport_no]' => $passport_no,'filter[iqama_no]' => $iqama_no,'filter[status]' => $status])}}"
+            <a href="{{route('prisoner.export',[
+                'filter[search_string]' => $search_string,'filter[cnic]' => $cnic,'filter[passport_no]' => $passport_no,'filter[iqama_no]' => $iqama_no,'filter[status]' => $status,
+                'filter[case_closing_reason]' => $case_closing_reason,'filter[case_closed]' => $case_closed,'filter[search_date]' => $search_date,
+                'filter[search_released]' => $search_released,
+                'filter[search_expected]' => $search_expected,
+
+                'filter[detention_authority]' => $detention_authority,
+                'filter[region]' => $region,
+                'filter[detention_city]' => $detention_city,
+                'filter[prison]' => $prison,
+                'filter[search_from]' => $search_from,
+            ])}}"
                class="flex items-center px-4 py-2 text-gray-600 bg-white border rounded-lg focus:outline-none hover:bg-gray-100 transition-colors duration-200 transform dark:text-gray-200 dark:border-gray-200  dark:hover:bg-gray-700 ml-2"
                title="Download in Excel File">
 
@@ -56,6 +183,14 @@
                     <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
                 </svg>
             </a>
+
+            <button onclick="window.print()"
+                    class="flex items-center px-4 py-2 text-gray-600 bg-white border rounded-lg focus:outline-none hover:bg-gray-100 transition-colors duration-200 transform dark:text-gray-200 dark:border-gray-200  dark:hover:bg-gray-700 ml-2"
+                    title="Members List">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/>
+                </svg>
+            </button>
 
 
         </div>
@@ -80,13 +215,11 @@
                         <input name="filter[cnic]" value=""
                                class="w-full px-3 py-2 mb-1 border-2 border-gray-200 rounded-md focus:outline-none focus:border-indigo-500 transition-colors cursor-pointer"/>
                     </div>
-
                     <div class="px-2 w-1/2">
                         <label class="font-bold text-sm mb-2 ml-1">PASSPORT NO</label>
                         <input name="filter[passport_no]" value=""
                                class="w-full px-3 py-2 mb-1 border-2 border-gray-200 rounded-md focus:outline-none focus:border-indigo-500 transition-colors cursor-pointer"/>
                     </div>
-
                     <div class="px-2 w-1/2">
                         <label class="font-bold text-sm mb-2 ml-1">IQAMA NO</label>
                         <input name="filter[iqama_no]" value=""
@@ -94,6 +227,72 @@
                     </div>
 
 
+                </div>
+
+                <div class="mb-3 -mx-2 flex items-end">
+                    <div class="md:w-1/2 px-3">
+                        <label class="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2" for="detention_authority">
+                            Detention authority
+                        </label>
+                        <select name="filter[detention_authority]" id="detention_authority" class="form-select w-full px-3 py-2 mb-1 border-2
+                                border-gray-200 rounded-md focus:outline-none
+                                focus:border-indigo-500 transition-colors cursor-pointer">
+                            <option value="" selected="">Please Select</option>
+                            @foreach(\App\Models\Prisoner::detention_authority() as $item => $value)
+                                <option value="{{$item}}">{{$item}} - {{$value}}</option>
+                            @endforeach
+                        </select>
+                    </div>
+
+
+                    <div class="md:w-1/2 px-3">
+                        <label class="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2" for="region">
+                            Region
+                        </label>
+                        <select name="filter[region]" id="region" class="form-select w-full px-3 py-2 mb-1 border-2
+                                border-gray-200 rounded-md focus:outline-none
+                                focus:border-indigo-500 transition-colors cursor-pointer">
+                            <option value="" selected="">Please Select</option>
+                            @foreach(\App\Models\Prisoner::regions() as $item => $value)
+                                <option value="{{$item}}">{{$item}} - {{$value}}</option>
+                            @endforeach
+                        </select>
+                    </div>
+
+
+                    <div class="md:w-1/2 px-3">
+                        <label class="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2" for="detention_city">
+                            Detention city
+                        </label>
+                        <select name="filter[detention_city]" id="detention_city" class="form-select w-full px-3 py-2 mb-1 border-2
+                                border-gray-200 rounded-md focus:outline-none
+                                focus:border-indigo-500 transition-colors cursor-pointer">
+                            <option value="" selected="">Please Select</option>
+                            @foreach(\App\Models\Prisoner::detention_city() as $item => $value)
+                                <option value="{{$item}}">{{$item}} - {{$value}}</option>
+                            @endforeach
+                        </select>
+                    </div>
+
+
+                    <div class="md:w-1/2 px-3">
+                        <label class="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2" for="prison">
+                            Prison
+                        </label>
+                        <select name="filter[prison]" id="prison" class="form-select w-full px-3 py-2 mb-1 border-2
+                                border-gray-200 rounded-md focus:outline-none
+                                focus:border-indigo-500 transition-colors cursor-pointer">
+                            <option value="" selected="">Please Select</option>
+                            @foreach(\App\Models\Prisoner::prisons() as $item => $value)
+                                <option value="{{$item}}">{{$item}} - {{$value}}</option>
+                            @endforeach
+                        </select>
+                    </div>
+
+
+                </div>
+
+                <div class="mb-3 -mx-2 flex items-end">
                     <div class="px-2 w-1/2">
                         <label class="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2"
                                for="status">
@@ -125,8 +324,49 @@
                             </option>
                         </select>
                     </div>
+                    <div class="px-2 w-1/2">
+                        <label class="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2"
+                               for="case_closing_reason">
+                            Case Closing Reason
+                        </label>
 
+                        <select name="filter[case_closing_reason]" id="case_closing_reason" class="form-select w-full px-3 py-2 mb-1 border-2
+                                border-gray-200 rounded-md focus:outline-none
+                                focus:border-indigo-500 transition-colors cursor-pointer">
+                            <option value="">Please Select</option>
+                            <option value="None">None</option>
+                            <option value="Deported">Deported</option>
+                            <option value="Released">Released</option>
+                            <option value="Executed">Executed</option>
+                            <option value="Unknown">Unknown</option>
+                        </select>
+
+
+                    </div>
+                    <div class="px-2 w-1/2">
+                        <label class="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2"
+                               for="case_closed">
+                            Case Closed
+                        </label>
+
+                        <select name="filter[case_closed]" id="case_closed" class="form-select w-full px-3 py-2 mb-1 border-2
+                                border-gray-200 rounded-md focus:outline-none
+                                focus:border-indigo-500 transition-colors cursor-pointer">
+                            <option value="">Please Select</option>
+                            <option value="Yes">Yes</option>
+                            <option value="No">No</option>
+                        </select>
+
+
+                    </div>
+                    <div class="px-2 w-1/2">
+                        <label class="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2" for="search_from">
+                            Date (From - To)
+                        </label>
+                        <input name="filter[search_from]" placeholder="YYYY-MM-DD YYYY-MM-DD" maxlength="15" class="date_mask w-full px-3 py-2 mb-1 border-2 border-gray-200 rounded-md focus:outline-none focus:border-indigo-500 transition-colors cursor-pointer" id="search_from" type="text">
+                    </div>
                 </div>
+
 
                 <div class="text-center">
                     <button type="submit" class=" px-4 py-2
@@ -143,11 +383,102 @@
 
     <div class="py-12">
 
-        <div class="max-w-12xl mx-auto sm:px-4 lg:px-8">
+        <div style="margin: auto;font-size: 8px;" id="hideOnScreen">
+
+            @if($search_string || $cnic || $passport_no || $iqama_no || $status || $case_closing_reason || $case_closed || $search_date || $search_released || $search_expected)
+                <table>
+                    <tr>
+                        <td style="text-align: center">#</td>
+                        <td style="text-align: center;">Name</td>
+                        <td style="text-align: center;">Iqama</td>
+                        <td style="text-align: center;">Passport</td>
+                        <td style="text-align: center;">Charges</td>
+                        <td style="text-align: center;">Detention Date</td>
+                        <td style="text-align: center;">Status</td>
+                        <td style="text-align: center;">Detention Period</td>
+                        <td style="text-align: center;">Expected Release Date</td>
+                        <td style="text-align: center;">Financial claim</td>
+                        <td style="text-align: center;">Prison</td>
+                    </tr>
+                    @foreach($prisoner_print as $p)
+                        <tr>
+                            <td style="text-align: center">{{$loop->iteration}}</td>
+                            <td>
+                                <a href="{{route('prisoner.show', $p->id)}}"
+                                   class="flex items-center text-blue-500 hover:underline">
+                                    <span>{{$p->name_and_father_name}}</span>
+                                </a>
+                            </td>
+                            <td style="text-align: center;">
+                                {{$p->iqama_no}}
+                            </td>
+                            <td style="text-align: center;">
+                                {{$p->passport_no}}
+                            </td>
+                            <td style="text-align: center;">
+                                @if($p->prisoner_charges->isNotEmpty())
+                                    @foreach($p->prisoner_charges as $charges)
+                                        {{$charges->crime_charges}},
+                                    @endforeach
+                                @endif
+                            </td>
+                            <td style="text-align: center;">
+                                {{\Carbon\Carbon::parse($p->gregorian_detention_date)->format('d-m-Y')}}
+                                / {{$p->hijri_detention_date}}
+                            </td>
+                            <td style="text-align: center;">
+
+                                    <span class="text-red-500 font-bold">
+                                    {{$p->case_closing_reason}}
+                                        @if(!empty($p->case_closing_date_gg))
+                                            on
+                                            {{\Carbon\Carbon::parse($p->case_closing_date_gg)->format('d-m-Y')}}
+                                        @endif
+
+                                    </span>
+
+                                {{$p->status}} <br>
+                                @if($p->sentence_in_years > 1)
+                                    {{$p->sentence_in_years}} Years,
+                                @else
+                                    {{$p->sentence_in_years}} Year,
+                                @endif
+
+
+                                @if($p->sentence_in_months > 1)
+                                    {{$p->sentence_in_months}} Months
+                                @else
+                                    {{$p->sentence_in_months}} Month
+                                @endif
+                            </td>
+                            <td style="text-align: center;">
+                                @if(!empty($p->gregorian_detention_date))
+                                    {{\Carbon\Carbon::parse($p->gregorian_detention_date)->diff(\Carbon\Carbon::now())->format('%y years, %m months and %d days')}}
+                                @endif
+                            </td>
+                            <td style="text-align: center;">
+                                @if(!empty($p->expected_release_date))
+                                    {{\Carbon\Carbon::parse($p->expected_release_date)->format('d-m-Y')}}
+                                @endif
+                            </td>
+                            <td style="text-align: center;">
+                                {{$p->financial_claim}}
+                            </td>
+                            <td style="text-align: center;">
+                                {{$p->prison}}
+                            </td>
+                        </tr>
+                    @endforeach
+                </table>
+            @endif
+
+        </div>
+
+        <div class=" print:hidden max-w-12xl mx-auto sm:px-4 lg:px-8">
 
             <div class="relative overflow-x-auto shadow-md ">
                 <table
-                    class="w-full text-xs border-collapse border border-slate-400 text-left text-black dark:text-gray-400">
+                    class="w-full text-xs border-collapse border border-slate-400 text-left text-black dark:text-gray-400 print:hidden">
                     <thead class="text-xs text-black uppercase bg-gray-50 dark:bg-gray-700 ">
                     <tr class="bg-gray-200 text-gray-600 uppercase text-xs leading-normal">
                         <th class="py-3 px-6 text-left border border-black">Name</th>
@@ -167,7 +498,7 @@
                     </thead>
                     <tbody class="text-black text-xs font-light">
                     @foreach($prisoner as $p)
-                        <tr class="border-b border-gray-200 bg-white text-black hover:bg-gray-100">
+                        <tr class="border-b border-gray-200 bg-white text-black hover:bg-gray-100 print:hidden">
                             <td class="py-3 px-6 text-center border border-black ">
                                 <a href="{{route('prisoner.show', $p->id)}}"
                                    class="flex items-center text-blue-500 hover:underline">
@@ -195,6 +526,16 @@
 
 
                             <td class="py-3 px-6 text-center border border-black ">
+
+                                    <span class="text-red-500 font-bold">
+                                    {{$p->case_closing_reason}}
+                                        @if(!empty($p->case_closing_date_gg))
+                                            on
+                                            {{\Carbon\Carbon::parse($p->case_closing_date_gg)->format('d-m-Y')}}
+                                        @endif
+
+                                    </span>
+
                                 {{$p->status}} <br>
                                 @if($p->sentence_in_years > 1)
                                     {{$p->sentence_in_years}} Years,
@@ -289,6 +630,7 @@
             $(document).ready(function () {
                 $('.select2').select2();
                 $('.cnic_mask').mask('00000-0000000-0');
+                $('.date_mask').mask('0000-00-00 0000-00-00');
                 $('.number_mask').mask('0000-0000000');
                 $('.phone_mask').mask('00000-000000');
             });

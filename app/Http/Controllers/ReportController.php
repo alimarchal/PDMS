@@ -32,6 +32,7 @@ class ReportController extends Controller
             ->select('prisons.region', 'prisons.jail', 'prisoner_charges.crime_charges', DB::raw("count(prisoner_charges.crime_charges) as total"))
             ->join('prisoner_charges', 'prisoners.id', '=', 'prisoner_charges.prisoner_id')
             ->join('prisons', 'prisoners.prison', '=', 'prisons.jail')
+            ->whereNotIn('prisoners.case_closing_reason', ['Deported', 'Released', 'Executed', 'Unknown'])
             ->groupBy('prisons.region', 'prisons.jail', 'prisoner_charges.crime_charges')
             ->orderBy('prisoners.id', 'asc')
             ->get();
@@ -59,6 +60,7 @@ class ReportController extends Controller
 
         $query = DB::table('prisoners')->select('prisoner_charges.crime_charges', DB::raw("COUNT(prisoners.id) as no_of_prisoners"))
             ->join('prisoner_charges', 'prisoners.id', '=', 'prisoner_charges.prisoner_id')
+            ->whereNotIn('prisoners.case_closing_reason', ['Deported', 'Released', 'Executed', 'Unknown'])
             ->groupBy('prisoner_charges.crime_charges')
             ->get();
         foreach ($query as $item) {
@@ -67,7 +69,7 @@ class ReportController extends Controller
 
         $total = $query->sum('no_of_prisoners');
 
-        return view('report.crimeWise', compact('crime_wise','total'));
+        return view('report.crimeWise', compact('crime_wise', 'total'));
     }
 
     /**
@@ -87,6 +89,7 @@ class ReportController extends Controller
 
         $query = DB::table('prisoners')
             ->select('prison', DB::raw("count(id) as prisoners"))
+            ->whereNotIn('prisoners.case_closing_reason', ['Deported', 'Released', 'Executed', 'Unknown'])
             ->groupBy('prison')
             ->get();
 
@@ -100,7 +103,7 @@ class ReportController extends Controller
 
         $total = $query->sum('prisoners');
 
-        return view('report.prisonWise', compact('prison_wise','total'));
+        return view('report.prisonWise', compact('prison_wise', 'total'));
     }
 
     public function regionWise()
@@ -118,7 +121,8 @@ class ReportController extends Controller
         }
         $query = DB::table('prisoners')
             ->select('region', 'status', DB::raw("count(*) as prisoners"))
-            ->groupBy('region','status')
+            ->whereNotIn('prisoners.case_closing_reason', ['Deported', 'Released', 'Executed', 'Unknown'])
+            ->groupBy('region', 'status')
             ->get();
         foreach ($query as $item) {
             if ($item->region == null) {
@@ -133,7 +137,7 @@ class ReportController extends Controller
 //            dd($value);
 //        }
 //        dd($region_wise);
-        return view('report.regionWise', compact('region_wise','total'));
+        return view('report.regionWise', compact('region_wise', 'total'));
     }
 
     /**

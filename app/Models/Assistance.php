@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -10,7 +11,7 @@ class Assistance extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['prisoner_id','prison','city','region','type','date','description','attachment'];
+    protected $fillable = ['prisoner_id', 'prison', 'city', 'region', 'type', 'date', 'description', 'attachment'];
 
 
     public function scopeSearchString(Builder $query, $search): Builder
@@ -25,6 +26,13 @@ class Assistance extends Model
         orWhere('description', 'LIKE', '%' . $search . '%');
     }
 
+
+    public function scopeSearchAssistance(Builder $query, $search): Builder
+    {
+        $dateS = Carbon::now()->subMonth(3);
+        $dateE = Carbon::now();
+        return $query->where('type','Legal Assistance')->whereBetween('date', [$dateS->format('Y-m-d'), $dateE->format('Y-m-d')]);
+    }
 
 
 }
