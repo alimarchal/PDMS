@@ -27,6 +27,12 @@ class Prisoner extends Model
     }
 
 
+    public function scopeSearchCharges(Builder $query, $search): Builder
+    {
+        return $query->whereRelation('prisoner_charges','crime_charges',$search);
+    }
+
+
     public function scopeSearchDate(Builder $query, $search): Builder
     {
         $dateS = Carbon::now()->subMonth(3);
@@ -37,18 +43,38 @@ class Prisoner extends Model
     //search_from
     public function scopeSearchFrom(Builder $query, $search): Builder
     {
-        $x = explode(' ', $search);
-        $dateS = Carbon::parse($x[0]);
-        $dateE = Carbon::parse($x[1]);
-        return $query->whereBetween('gregorian_detention_date', [$dateS->format('Y-m-d'), $dateE->format('Y-m-d')]);
+        $datetime1 = null;
+        $datetime2 = null;
+
+
+        if (isset($search) && !empty($search)) {
+            $dates = explode(' – ', $search);
+            $fdate = @$dates[0];
+            $tdate = @$dates[1];
+            if (!empty($fdate) && !empty($tdate)) {
+                $datetime1 = new \DateTime($fdate);
+                $datetime2 = new \DateTime($tdate);
+            }
+        }
+
+        $date_from = null;
+        $date_to = null;
+
+        if (!empty($search)) {
+            $date_from = $datetime1->format('Y-m-d');
+            $date_to = $datetime2->format('Y-m-d');
+        }
+
+
+        return $query->whereBetween('gregorian_detention_date', [$date_from, $date_to])->orWhereBetween('case_closing_date_gg', [$date_from, $date_to]);
     }
 
     public function scopeSearchReleased(Builder $query, $search): Builder
     {
         $dateS = Carbon::now()->subMonth(3);
         $dateE = Carbon::now();
-        return $query->where('status', 'Released')->whereBetween('expected_release_date',
-            [$dateS->format('Y-m-d'), $dateE->format('Y-m-d')]);
+        return $query->where('status', 'Released')->orWhere('prisoners.case_closing_reason', 'Deported')->
+        whereBetween('case_closing_date_gg', [$dateS->format('Y-m-d 00:00:00'), $dateE->format('Y-m-d 23:59:59')]);
     }
 
     public function scopeSearchExpected(Builder $query, $search): Builder
@@ -293,11 +319,9 @@ class Prisoner extends Model
             'Undertrial',
             'Sentenced',
             'Death Sentenced',
-            'Released',
-            'Shifted',
-            'Executed',
         ];
     }
+
 
     public static function crime_charges(): array
     {

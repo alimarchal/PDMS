@@ -31,7 +31,7 @@ class Assistance extends Model
     {
         $dateS = Carbon::now()->subMonth(3);
         $dateE = Carbon::now();
-        return $query->where('type','Legal Assistance')->whereBetween('date', [$dateS->format('Y-m-d'), $dateE->format('Y-m-d')]);
+        return $query->where('type','Legal Assistance')->orWhere('type','=','Counselor Access')->whereBetween('date', [$dateS->format('Y-m-d'), $dateE->format('Y-m-d')]);
     }
 
 

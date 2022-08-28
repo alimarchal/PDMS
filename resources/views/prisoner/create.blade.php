@@ -157,33 +157,6 @@
 
 
 
-                                <div class="-mx-3 md:flex mb-3">
-
-
-
-
-                                    <div class="md:w-1/2 px-3">
-                                        <label class="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2" for="status">
-                                            Prisoner Status
-                                        </label>
-                                        <select name="status" id="status" class="appearance-none block w-full bg-grey-lighter text-grey-darker border border-red rounded py-3 px-4 mb-3">
-
-                                            @foreach(\App\Models\Prisoner::prisoner_status() as $item)
-                                                <option value="{{$item}}"  @if($item == 'Detainee') selected  @endif>
-                                                    {{$item}}
-                                                </option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-
-
-
-
-
-
-
-                                </div>
-
 
 
                                 <hr>
@@ -246,6 +219,26 @@
                                     </div>
 
                                 </div>
+
+
+                                <div class="-mx-3 md:flex mb-3">
+
+                                    <div class="md:w-1/2 px-3">
+                                        <label class="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2" for="status">
+                                            Prisoner Status
+                                        </label>
+                                        <select name="status" id="status" class="appearance-none block w-full bg-grey-lighter text-grey-darker border border-red rounded py-3 px-4 mb-3">
+
+                                            @foreach(\App\Models\Prisoner::prisoner_status() as $item)
+                                                <option value="{{$item}}"  @if($item == 'Detainee') selected  @endif>
+                                                    {{$item}}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+
+                                </div>
+
 
 
 
@@ -383,6 +376,8 @@
                                             <option value="Released">Released</option>
                                             <option value="Executed">Executed</option>
                                             <option value="Unknown">Unknown</option>
+                                            <option value="Shifted">Shifted</option>
+                                            <option value="Executed">Executed</option>
                                         </select>
                                     </div>
 

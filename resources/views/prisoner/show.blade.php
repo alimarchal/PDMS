@@ -22,33 +22,27 @@
                 /*    width: 33.33%;*/
                 /*    height: 100px;*/
                 /*}*/
-
                 /*#one h1 {*/
                 /*    font-size: 18px;*/
                 /*    text-align: center;*/
                 /*    font-weight: bold;*/
                 /*}*/
-
                 /*#three h1 {*/
                 /*    font-size: 18px;*/
                 /*    text-align: center;*/
                 /*    font-weight: bold;*/
                 /*}*/
-
                 /*#one p {*/
                 /*    font-weight: bold;*/
                 /*}*/
                 /*#three p {*/
                 /*    font-weight: bold;*/
                 /*}*/
-
-
                 /*table, td, th {*/
                 /*    border: 1px solid;*/
                 /*    padding-left: 10px;*/
                 /*    padding-top: 5px;*/
                 /*}*/
-
                 /*table {*/
                 /*    width: 100%;*/
                 /*    border-collapse: collapse;*/
@@ -85,8 +79,9 @@
                 }
 
                 #one p {
-                   font-weight: bold;
+                    font-weight: bold;
                 }
+
                 #three p {
                     font-weight: bold;
                 }
@@ -133,11 +128,11 @@
                 <span class="hidden md:inline-block ml-2">Add Prisoner Shifting</span>
             </a>
 
-            <button  onclick="window.print()"
-               class="flex items-center px-4 py-2 text-gray-600 bg-white border rounded-lg focus:outline-none hover:bg-gray-100 transition-colors duration-200 transform dark:text-gray-200 dark:border-gray-200  dark:hover:bg-gray-700 ml-2"
-               title="Members List">
+            <button onclick="window.print()"
+                    class="flex items-center px-4 py-2 text-gray-600 bg-white border rounded-lg focus:outline-none hover:bg-gray-100 transition-colors duration-200 transform dark:text-gray-200 dark:border-gray-200  dark:hover:bg-gray-700 ml-2"
+                    title="Members List">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/>
                 </svg>
             </button>
 
@@ -174,13 +169,13 @@
             <br>
             <br>
             <br>
-{{--            <hr style="border: 1px solid black; margin-top: 50px;">--}}
+            {{--            <hr style="border: 1px solid black; margin-top: 50px;">--}}
             <br>
             <br>
 
             <table>
                 <tr>
-                    <th colspan="4">Date: {{date('d-m-Y')}} تاریخ </th>
+                    <th colspan="4">Date: {{date('d-m-Y')}} تاریخ</th>
 
                 </tr>
                 <tr>
@@ -188,9 +183,9 @@
                     <td colspan="3">{{$prisoner->name_and_father_name}}</td>
                 </tr>
                 <tr>
-                    <td>Passport: 	</td>
+                    <td>Passport:</td>
                     <td>{{$prisoner->passport_no}}</td>
-                    <td>Iqama: 	</td>
+                    <td>Iqama:</td>
                     <td>{{$prisoner->iqama_no}}</td>
                 </tr>
 
@@ -202,7 +197,7 @@
                 </tr>
 
                 <tr>
-                    <td>Detention City:	</td>
+                    <td>Detention City:</td>
                     <td>{{$prisoner->detention_city}}</td>
                     <td>Prison:</td>
                     <td>{{$prisoner->prison}}</td>
@@ -233,18 +228,24 @@
                     </td>
                     <td>Sentence:</td>
                     <td>
-                        @if($prisoner->sentence_in_years > 1)
-                            {{$prisoner->sentence_in_years}} Years,
+
+                        @if($prisoner->status == "Death Sentenced")
+                            {{$prisoner->status}}
                         @else
-                            {{$prisoner->sentence_in_years}} Year,
-                        @endif
+                            @if($prisoner->sentence_in_years > 1)
+                                {{$prisoner->sentence_in_years}} Years,
+                            @else
+                                {{$prisoner->sentence_in_years}} Year,
+                            @endif
 
 
-                        @if($prisoner->sentence_in_months > 1)
-                            {{$prisoner->sentence_in_months}} Months
-                        @else
-                            {{$prisoner->sentence_in_months}} Month
+                            @if($prisoner->sentence_in_months > 1)
+                                {{$prisoner->sentence_in_months}} Months
+                            @else
+                                {{$prisoner->sentence_in_months}} Month
+                            @endif
                         @endif
+
                     </td>
                 </tr>
 
@@ -285,7 +286,7 @@
             </table>
 
             <br>
-            Note:  <br><br>
+            Note: <br><br>
             <hr style="border: 1px solid black; ">
             <hr style="border: 1px solid black; margin-top: 50px; ">
             <hr style="border: 1px solid black; margin-top: 50px; ">
@@ -483,7 +484,13 @@
 
                                     <div class="grid grid-cols-2">
                                         <div class="px-4 py-2 font-semibold">Sentence</div>
-                                        <div class="px-4 py-2">{{$prisoner->sentence_in_years}} Years and {{$prisoner->sentence_in_months}} Months</div>
+                                        <div class="px-4 py-2">
+
+
+                                            {{$prisoner->sentence_in_years}} Years and {{$prisoner->sentence_in_months}} Months
+
+
+                                        </div>
                                     </div>
 
 

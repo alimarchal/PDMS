@@ -25,8 +25,8 @@
                                 </div>
                             </div>
                             <div class="col-span-1 flex items-center justify-end">
+                                <img src="https://cdn-icons-png.flaticon.com/128/6289/6289143.png" alt="employees on leave" class="h-12 w-12">
 
-                                <img src="https://cdn-icons-png.flaticon.com/128/3122/3122321.png" alt="legal case" class="h-12 w-12">
                             </div>
                         </div>
                     </div>
@@ -41,7 +41,8 @@
                                 <div class="mt-1 text-base  font-bold text-gray-600">Released in last 3 months</div>
                             </div>
                             <div class="col-span-1 flex items-center justify-end">
-                                <img src="https://cdn-icons-png.flaticon.com/512/186/186359.png" alt="legal case" class="h-12 w-12">
+
+                                <img src="https://cdn-icons-png.flaticon.com/512/3813/3813948.png" alt="legal case" class="h-12 w-12">
                             </div>
                         </div>
                     </div>
@@ -60,7 +61,7 @@
                                 <div class="mt-1 text-base  font-bold text-gray-600">Legal assistance provided in last 3 months</div>
                             </div>
                             <div class="col-span-1 flex items-center justify-end">
-                                <img src="https://cdn-icons-png.flaticon.com/128/6289/6289143.png" alt="employees on leave" class="h-12 w-12">
+                                <img src="https://cdn-icons-png.flaticon.com/128/3122/3122321.png" alt="legal case" class="h-12 w-12">
                             </div>
                         </div>
                     </div>
@@ -77,7 +78,7 @@
                             </div>
                             <div class="col-span-1 flex items-center justify-end">
 
-                                <img src="https://static.thenounproject.com/png/3316452-200.png" alt="legal case" class="h-12 w-12">
+                                <img src="https://cdn-icons-png.flaticon.com/512/186/186359.png" alt="legal case" class="h-12 w-12">
                             </div>
                         </div>
                     </div>
@@ -338,13 +339,14 @@
                 markers: {
                     colors: ['#F44336', '#E91E63', '#9C27B0']
                 },
-                labels: [@foreach($total_prisoners as $key => $value) '{{$key}}', @endforeach],
+                @php $x = 0; @endphp
+                labels: [@foreach($total_prisoners as $key => $value) '{{$key}}', @php $x = $x + $value @endphp @endforeach],
                 legend: {
                     position: 'right',
 
                 },
                 title: {
-                    text: 'Total Prisoners',
+                    text: 'Total Prisoners - {{$x}}',
                     align: 'left',
                     margin: 0,
                     offsetX: 0,
@@ -624,7 +626,7 @@
                     position: 'bottom',
                 },
                 title: {
-                    text: 'Private Rights Prisoners',
+                    text: 'Private Rights Prisoners - {{$private_right}}',
                     align: 'left',
                     margin: 0,
                     offsetX: 0,

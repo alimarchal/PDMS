@@ -183,20 +183,7 @@
                                 </div>
 
 
-                                <div class="md:w-1/2 px-3">
-                                    <label class="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2" for="status">
-                                        Prisoner Status
-                                    </label>
 
-                                    <select name="status" id="status" class="appearance-none block w-full bg-grey-lighter text-grey-darker border border-red rounded py-3 px-4 mb-3">
-
-                                        @foreach(\App\Models\Prisoner::prisoner_status() as $item)
-                                            <option value="{{$item}}"  @if($item == $prisoner->status) selected @endif>
-                                                {{$item}}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                </div>
 
 
                                 <hr>
@@ -260,7 +247,20 @@
                                         <input name="penalty_fine" value="{{$prisoner->penalty_fine}}" class="appearance-none block w-full bg-grey-lighter text-grey-darker border border-red rounded py-3 px-4 mb-3" id="grid-penalty_fine" type="text">
                                     </div>
 
-                                    ``
+                                    <div class="md:w-1/2 px-3">
+                                        <label class="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2" for="status">
+                                            Prisoner Status
+                                        </label>
+
+                                        <select name="status" id="status" class="appearance-none block w-full bg-grey-lighter text-grey-darker border border-red rounded py-3 px-4 mb-3">
+
+                                            @foreach(\App\Models\Prisoner::prisoner_status() as $item)
+                                                <option value="{{$item}}"  @if($item == $prisoner->status) selected @endif>
+                                                    {{$item}}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
                                 </div>
 
                                 <br>

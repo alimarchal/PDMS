@@ -72,6 +72,34 @@
                     height: 950px;
                 }
 
+
+
+                #one, #two, #three {
+                    float: left;
+                    width: 33.33%;
+                    height: 100px;
+                }
+
+                #one h1 {
+                    font-size: 18px;
+                    text-align: center;
+                    font-weight: bold;
+                }
+
+                #three h1 {
+                    font-size: 18px;
+                    text-align: center;
+                    font-weight: bold;
+                }
+
+                #one p {
+                    font-weight: bold;
+                }
+
+                #three p {
+                    font-weight: bold;
+                }
+
                 table {
                     page-break-inside: auto
                 }
@@ -94,6 +122,12 @@
                 }
             }
         </style>
+        <link rel="stylesheet" href="https://cms.ajkced.gok.pk/daterange/daterangepicker.min.css">
+        <script src="https://cms.ajkced.gok.pk/daterange/jquery-3.6.0.min.js"></script>
+        <script src="https://cms.ajkced.gok.pk/daterange/moment.min.js"></script>
+        <script src="https://cms.ajkced.gok.pk/daterange/knockout-3.5.1.js" defer></script>
+        <script src="https://cms.ajkced.gok.pk/daterange/daterangepicker.min.js" defer></script>
+
     @endsection
 
     <x-slot name="header">
@@ -143,6 +177,7 @@
                 $detention_city = null;
                 $prison = null;
                 $search_from = null;
+                $search_charges = null;
 
                 empty(request()->get('filter')['search_string']) ? $search_string = null: $search_string = request()->get('filter')['search_string'];
                 empty(request()->get('filter')['cnic']) ? $cnic = null: $cnic = request()->get('filter')['cnic'];
@@ -160,6 +195,7 @@
                 empty(request()->get('filter')['detention_city']) ? $detention_city = null: $detention_city = request()->get('filter')['detention_city'];
                 empty(request()->get('filter')['prison']) ? $prison = null: $prison = request()->get('filter')['prison'];
                 empty(request()->get('filter')['search_from']) ? $search_from = null: $search_from = request()->get('filter')['search_from'];
+                empty(request()->get('filter')['search_charges']) ? $search_charges = null: $search_charges = request()->get('filter')['search_charges'];
 
 
             @endphp
@@ -175,6 +211,7 @@
                 'filter[detention_city]' => $detention_city,
                 'filter[prison]' => $prison,
                 'filter[search_from]' => $search_from,
+                'filter[search_charges]' => $search_charges,
             ])}}"
                class="flex items-center px-4 py-2 text-gray-600 bg-white border rounded-lg focus:outline-none hover:bg-gray-100 transition-colors duration-200 transform dark:text-gray-200 dark:border-gray-200  dark:hover:bg-gray-700 ml-2"
                title="Download in Excel File">
@@ -359,11 +396,29 @@
 
 
                     </div>
+
                     <div class="px-2 w-1/2">
                         <label class="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2" for="search_from">
-                            Date (From - To)
+                            Date Range (From - To)
                         </label>
-                        <input name="filter[search_from]" placeholder="YYYY-MM-DD YYYY-MM-DD" maxlength="15" class="date_mask w-full px-3 py-2 mb-1 border-2 border-gray-200 rounded-md focus:outline-none focus:border-indigo-500 transition-colors cursor-pointer" id="search_from" type="text">
+
+                        <input type="search" readonly name="filter[search_from]" id="date_range" class="w-full px-3 py-2 mb-1 border-2 border-gray-200 rounded-md focus:outline-none focus:border-indigo-500 transition-colors cursor-pointer">
+                    </div>
+                </div>
+
+
+
+                <div class="mb-3 -mx-2 flex items-end">
+                    <div class="md:w-1/2 px-3">
+                        <label class="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2" for="search_charges">
+                            charges crime
+                        </label>
+                        <select  style="width: 100%;" name="filter[search_charges]" id="search_charges" class="select2 appearance-none block w-full bg-grey-lighter text-grey-darker border border-red rounded py-3 px-4 mb-3">
+                            <option value="">Please Select</option>
+                            @foreach(\App\Models\Prisoner::crime_charges() as $item => $value)
+                                <option value="{{$item}}">{{$item}} - {{$value}}</option>
+                            @endforeach
+                        </select>
                     </div>
                 </div>
 
@@ -384,8 +439,90 @@
     <div class="py-12">
 
         <div style="margin: auto;font-size: 8px;" id="hideOnScreen">
+            <div id="one">
+                <h1>Embassy of Pakistan Riyadh,<br>Saudi Arabia</h1>
+            </div>
+            <div id="two">
+                <img src="{{Storage::url('logo.png')}}" style="height: 100px; display: block;margin-left: auto;margin-right: auto;" alt="">
+            </div>
+            <div id="three" style="direction: rtl;">
 
-            @if($search_string || $cnic || $passport_no || $iqama_no || $status || $case_closing_reason || $case_closed || $search_date || $search_released || $search_expected)
+                <h1>
+                    سفارت خانہ پاکستان ریاض،
+                    <br>
+                    سعودی عرب
+                </h1>
+            </div>
+
+
+            @if($search_string || $cnic || $passport_no || $iqama_no || $status || $case_closing_reason || $case_closed || $search_date || $search_released || $search_expected || $detention_authority || $region || $detention_city || $prison || $search_from || $search_charges)
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+
+                <p> Search Criteria <br>
+                    @if($search_string)
+                        SEARCH: {{$search_string}} ,
+                    @endif
+
+                    @if($cnic)
+                        CNIC: {{$cnic}}
+                    @endif
+
+                    @if($passport_no)
+                        PASSPORT NO: {{$passport_no}} ,
+                    @endif
+
+                    @if($iqama_no)
+                        IQAMA NO: {{$iqama_no}} ,
+                    @endif
+
+                    @if($detention_authority)
+                        DETENTION AUTHORITY: {{$detention_authority}} ,
+                    @endif
+
+                    @if($region)
+                        REGION: {{$region}} ,
+                    @endif
+
+                    @if($detention_city)
+                        DETENTION CITY: {{$detention_city}} ,
+                    @endif
+
+                    @if($prison)
+                        PRISON: {{$prison}} ,
+                    @endif
+
+                    @if($case_closing_reason)
+                        CASE CLOSING REASON: {{$case_closing_reason}} ,
+                    @endif
+
+                    @if($case_closed)
+                        CASE CLOSED: {{$case_closed}} ,
+                    @endif
+
+
+                    @if($search_charges)
+                        CHARGES CRIME: {{$search_charges}} ,
+                    @endif
+
+                    @if($search_from)
+                        DATE RANGE (FROM - TO): {{$search_from}} ,
+                    @endif
+
+                </p>
+                <br>
+                <br>
+
+
+
                 <table>
                     <tr>
                         <td style="text-align: center">#</td>
@@ -465,7 +602,12 @@
                                 {{$p->financial_claim}}
                             </td>
                             <td style="text-align: center;">
-                                {{$p->prison}}
+                                @if(!empty(\App\Models\Prison::where('jail', $p->prison)->first()))
+                                    {{ \App\Models\Prison::where('jail', $p->prison)->first()->region }} -
+                                    {{ $p->prison }}
+                                @else
+                                    {{$p->prison}}
+                                @endif
                             </td>
                         </tr>
                     @endforeach
@@ -571,7 +713,13 @@
 
 
                             <td class="py-3 px-6 text-center border border-black ">
-                                {{$p->prison}}
+
+                                @if(!empty(\App\Models\Prison::where('jail', $p->prison)->first()))
+                                    {{ \App\Models\Prison::where('jail', $p->prison)->first()->region }} -
+                                    {{ $p->prison }}
+                                @else
+                                    {{$p->prison}}
+                                @endif
                             </td>
 
                             {{--                            @canany(['Update Employee', 'Delete Employee'])--}}
@@ -653,6 +801,20 @@
                     targetDiv.style.display = "block";
                 }
             };
+
+
+        </script>
+
+        <script>
+            $(document).ready(function () {
+                $("#date_range").daterangepicker({
+                    minDate: moment().subtract(10, 'years'),
+                    orientation: 'left',
+                    callback: function (startDate, endDate, period) {
+                        $(this).val(startDate.format('L') + ' – ' + endDate.format('L'));
+                    }
+                });
+            });
         </script>
     @endsection
 
