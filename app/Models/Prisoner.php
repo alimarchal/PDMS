@@ -135,6 +135,7 @@ class Prisoner extends Model
         'iqama',
         'other',
         'status',
+        'detention_place',
     ];
 
     public function shifted_to_other_department()
@@ -150,6 +151,7 @@ class Prisoner extends Model
             'Border Security' => 'أمن الحدود',
             'Intelligence - State Security' => 'المباحث - أمن الدولة',
             'Administrative intelligence' => 'المباحث الإدارية',
+            'Public Prosecution' => 'النيابة العامة',
         ];
     }
 
@@ -344,6 +346,7 @@ class Prisoner extends Model
             'Smuggling' => 'تهريب',
             'Security case' => 'قضية أمنية',
             'Traffic Accident' => 'حادث مروري',
+            'Money Laundering' => 'غسيل الأموال',
         ];
     }
 

@@ -79,6 +79,17 @@
                                     </div>
 
 
+
+                                    <div class="md:w-1/2 px-3">
+                                        <label class="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2" for="grid-detention_place">
+                                            Detention Place
+                                        </label>
+                                        <input name="detention_place"  value="{{$prisoner->detention_place}}" class=" appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded py-3 px-4"
+                                               id="grid-detention_place" type="text">
+                                    </div>
+
+
+
                                     <div class="md:w-1/2 px-3">
                                         <label class="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2" for="region">
                                             Region

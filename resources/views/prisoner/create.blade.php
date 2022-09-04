@@ -75,16 +75,37 @@
 
 
                                     <div class="md:w-1/2 px-3">
-                                        <label class="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2" for="region">
-                                            Region
+                                        <label class="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2" for="grid-detention_place">
+                                            Detention Place
                                         </label>
-                                        <select name="region" id="region" class="select2 appearance-none block w-full bg-grey-lighter text-grey-darker border border-red rounded py-3 px-4 mb-3">
+                                        <input name="detention_place" class=" appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded py-3 px-4"
+                                               id="grid-detention_place" type="text">
+                                    </div>
+
+
+                                    <div class="md:w-1/2 px-3">
+                                        <label class="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2" for="prison">
+                                            Prison
+                                        </label>
+                                        <select name="prison" id="prison" class="select2 appearance-none block w-full bg-grey-lighter text-grey-darker border border-red rounded py-3 px-4 mb-3">
                                             <option value="" selected="">Please Select</option>
-                                            @foreach(\App\Models\Prisoner::regions() as $item => $value)
+                                            @foreach(\App\Models\Prisoner::prisons() as $item => $value)
                                                 <option value="{{$item}}">{{$item}} - {{$value}}</option>
                                             @endforeach
                                         </select>
                                     </div>
+
+{{--                                    <div class="md:w-1/2 px-3">--}}
+{{--                                        <label class="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2" for="region">--}}
+{{--                                            Region--}}
+{{--                                        </label>--}}
+{{--                                        <select name="region" id="region" class="select2 appearance-none block w-full bg-grey-lighter text-grey-darker border border-red rounded py-3 px-4 mb-3">--}}
+{{--                                            <option value="" selected="">Please Select</option>--}}
+{{--                                            @foreach(\App\Models\Prisoner::regions() as $item => $value)--}}
+{{--                                                <option value="{{$item}}">{{$item}} - {{$value}}</option>--}}
+{{--                                            @endforeach--}}
+{{--                                        </select>--}}
+{{--                                    </div>--}}
 
 
                                     <div class="md:w-1/2 px-3">
@@ -100,17 +121,7 @@
                                     </div>
 
 
-                                    <div class="md:w-1/2 px-3">
-                                        <label class="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2" for="prison">
-                                            Prison
-                                        </label>
-                                        <select name="prison" id="prison" class="select2 appearance-none block w-full bg-grey-lighter text-grey-darker border border-red rounded py-3 px-4 mb-3">
-                                            <option value="" selected="">Please Select</option>
-                                            @foreach(\App\Models\Prisoner::prisons() as $item => $value)
-                                                <option value="{{$item}}">{{$item}} - {{$value}}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
+
 
 
                                 </div>

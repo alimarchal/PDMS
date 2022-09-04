@@ -1,7 +1,11 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-center text-xl text-gray-800 leading-tight">
-            {{ config('app.name') }}
+        <h2 class="font-semibold text-left text-center text-xl text-gray-800 leading-tight" style="text-align: left">
+            <span class="text-green-700 font-bold">Embassy of Pakistan Riyadh, Saudi Arabia</span><br>
+            <span class="font-bold">Community Welfare Wing</span>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <span>Prison Database Management System</span>
         </h2>
     </x-slot>
     @section('custom_css')

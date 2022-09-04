@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StorePrisonerRequest;
 use App\Http\Requests\UpdatePrisonerRequest;
+use App\Models\Prison;
 use App\Models\Prisoner;
 use App\Models\PrisonerCharges;
 use Carbon\Carbon;
@@ -55,7 +56,7 @@ class PrisonerController extends Controller
 
 
         $query_total_prisoners = DB::table('prisoners')->select('status', DB::raw("count(*) as total"))
-            ->whereIn('status', [ 'Undertrial', 'Sentenced', 'Death Sentenced'])
+            ->whereIn('status', ['Undertrial', 'Sentenced', 'Death Sentenced'])
             ->groupBy('status')->get();
 
         $query_total_prisoners_region_wise = DB::table('prisoners')->select('region', DB::raw("COUNT(*) as total"))->whereNotIn('prisoners.case_closing_reason', ['Deported', 'Released', 'Executed', 'Unknown'])->where('prisoners.status', '!=', 'Released')->groupBy('region')->get();
@@ -356,6 +357,21 @@ class PrisonerController extends Controller
         }
 
 
+        if ($request->input('prison')) {
+            $prison = Prison::where('jail', $request->prison)->first();
+            $request->merge(['region' => $prison->region]);
+            $request->merge(['detention_city' => $prison->detention_city]);
+        }
+
+        if ($request->input('detention_city')) {
+            $detention_city = Prison::where('detention_city', $request->detention_city)->first();
+            if (!empty($detention_city)) {
+                $request->merge(['region' => $detention_city->region]);
+                $request->merge(['jail' => $detention_city->jail]);
+            }
+        }
+
+
         $prisoner = Prisoner::create([
             'name_and_father_name' => $request->name_and_father_name,
             'arabic_name' => $request->arabic_name,
@@ -401,6 +417,7 @@ class PrisonerController extends Controller
             'iqama' => $request->iqama,
             'other' => $request->other,
             'status' => $request->status,
+            'detention_place' => $request->detention_place,
         ]);
 
         $prisoner_id = $prisoner->id;
@@ -553,6 +570,7 @@ class PrisonerController extends Controller
             'iqama' => $request->iqama,
             'other' => $request->other,
             'status' => $request->status,
+            'detention_place' => $request->detention_place,
         ]);
 
 

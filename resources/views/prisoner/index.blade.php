@@ -27,6 +27,7 @@
                 table {
                     width: 100%;
                     border-collapse: collapse;
+                    font-size: 12px;
                 }
 
                 /*#one, #two, #three {*/
@@ -312,6 +313,8 @@
                     </div>
 
 
+
+
                     <div class="md:w-1/2 px-3">
                         <label class="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2" for="prison">
                             Prison
@@ -440,7 +443,10 @@
 
         <div style="margin: auto;font-size: 8px;" id="hideOnScreen">
             <div id="one">
-                <h1>Embassy of Pakistan Riyadh,<br>Saudi Arabia</h1>
+                <h1>Embassy of Pakistan Riyadh,<br>Saudi Arabia
+                <br>
+                    Community Welfare Wing
+                </h1>
             </div>
             <div id="two">
                 <img src="{{Storage::url('logo.png')}}" style="height: 100px; display: block;margin-left: auto;margin-right: auto;" alt="">
@@ -451,22 +457,26 @@
                     سفارت خانہ پاکستان ریاض،
                     <br>
                     سعودی عرب
+                    <br>
+                    شعبہ کمیونٹی ویلفیئر
                 </h1>
             </div>
 
-
             @if($search_string || $cnic || $passport_no || $iqama_no || $status || $case_closing_reason || $case_closed || $search_date || $search_released || $search_expected || $detention_authority || $region || $detention_city || $prison || $search_from || $search_charges)
-                <br>
-                <br>
-                <br>
-                <br>
-                <br>
-                <br>
-                <br>
-                <br>
-                <br>
-                <br>
 
+
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+                   <h2 style="text-align: center"> <span class="text-center"> Prisoner's Report<br>
+                    Date: {{\Carbon\Carbon::now()->format('d-m-Y')}}
+                   </h2>
                 <p> Search Criteria <br>
                     @if($search_string)
                         SEARCH: {{$search_string}} ,
@@ -518,6 +528,8 @@
                     @endif
 
                 </p>
+
+
                 <br>
                 <br>
 
@@ -529,7 +541,7 @@
                         <td style="text-align: center;">Name</td>
                         <td style="text-align: center;">Iqama</td>
                         <td style="text-align: center;">Passport</td>
-                        <td style="text-align: center;">Charges</td>
+                        <td style="text-align: center; width: 50px;">Charges</td>
                         <td style="text-align: center;">Detention Date</td>
                         <td style="text-align: center;">Status</td>
                         <td style="text-align: center;">Detention Period</td>
@@ -552,7 +564,7 @@
                             <td style="text-align: center;">
                                 {{$p->passport_no}}
                             </td>
-                            <td style="text-align: center;">
+                            <td style="text-align: left;">
                                 @if($p->prisoner_charges->isNotEmpty())
                                     @foreach($p->prisoner_charges as $charges)
                                         {{$charges->crime_charges}},
