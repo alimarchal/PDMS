@@ -2,6 +2,7 @@
 
 namespace App\Exports;
 
+use App\Models\Prison;
 use App\Models\Prisoner;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Spatie\QueryBuilder\AllowedFilter;
@@ -16,13 +17,28 @@ class PrisonersExport implements FromCollection, WithHeadings, ShouldAutoSize
     public function headings(): array
     {
         return [
-            'name_and_father_name', 'arabic_name', 'iqama_no', 'passport_no', 'detention_authority', 'region', 'detention_city',
-            'prison', 'gender', 'cnic', 'hijri_detention_date', 'gregorian_detention_date', 'case_details', 'sentence_in_years',
-            'sentence_in_months', 'financial_claim', 'penalty_fine', 'case_court_name', 'case_city', 'case_number', 'case_prisoner_number',
+            'name_and_father_name',
+            'iqama_no',
+            'passport_no',
+            'charges_case',
+            'hijri_detention_date',
+            'gregorian_detention_date',
+            'status',
+            'sentence_in_years',
+            'sentence_in_months',
+            'expected_release_date',
+            'detention_period',
+            'financial_claim',
+            'prison',
+            'detention_city',
+            'region',
+            'detention_authority',
+
+            'arabic_name','gender', 'cnic',   'case_details',  'penalty_fine', 'case_court_name', 'case_city', 'case_number', 'case_prisoner_number',
             'case_claim_number', 'case_sadad_number', 'case_claimer_name', 'case_claimer_contact_number', 'case_consular_access_date',
             'etd_issuance_date', 'etd_number', 'case_closed', 'case_closing_reason', 'case_closing_date_hijri', 'case_closing_date_gg',
-            'date_of_birth', 'provinces', 'district', 'tehseel', 'muhallah_town', 'contact_no_in_pakistan', 'detention_period',
-            'expected_release_date', 'status'
+            'date_of_birth', 'provinces', 'district', 'tehseel', 'muhallah_town', 'contact_no_in_pakistan',
+
         ];
     }
 
@@ -31,6 +47,8 @@ class PrisonersExport implements FromCollection, WithHeadings, ShouldAutoSize
      */
     public function collection()
     {
+
+
 
         return QueryBuilder::for(Prisoner::class)
             ->allowedIncludes(['prisoner_charges'])
@@ -52,13 +70,28 @@ class PrisonersExport implements FromCollection, WithHeadings, ShouldAutoSize
                 AllowedFilter::exact('case_closing_reason'),
                 AllowedFilter::exact('case_closed'),
                 AllowedFilter::exact('iqama_no')
-            ])->latest()->get(['name_and_father_name', 'arabic_name', 'iqama_no', 'passport_no', 'detention_authority', 'region', 'detention_city',
-                'prison', 'gender', 'cnic', 'hijri_detention_date', 'gregorian_detention_date', 'case_details', 'sentence_in_years',
-                'sentence_in_months', 'financial_claim', 'penalty_fine', 'case_court_name', 'case_city', 'case_number', 'case_prisoner_number',
+            ])->latest()->get([
+                'name_and_father_name',
+                'iqama_no',
+                'passport_no',
+                'all_charges',
+                'hijri_detention_date',
+                'gregorian_detention_date',
+                'status',
+                'sentence_in_years',
+                'sentence_in_months',
+                'expected_release_date',
+                'detention_period',
+                'financial_claim',
+                'prison',
+                'detention_city',
+                'region',
+                'detention_authority',
+                'arabic_name','gender', 'cnic',   'case_details',  'penalty_fine', 'case_court_name', 'case_city', 'case_number', 'case_prisoner_number',
                 'case_claim_number', 'case_sadad_number', 'case_claimer_name', 'case_claimer_contact_number', 'case_consular_access_date',
                 'etd_issuance_date', 'etd_number', 'case_closed', 'case_closing_reason', 'case_closing_date_hijri', 'case_closing_date_gg',
-                'date_of_birth', 'provinces', 'district', 'tehseel', 'muhallah_town', 'contact_no_in_pakistan', 'detention_period',
-                'expected_release_date', 'status',]);
+                'date_of_birth', 'provinces', 'district', 'tehseel', 'muhallah_town', 'contact_no_in_pakistan',
+            ]);
     }
 
 

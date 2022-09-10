@@ -339,6 +339,13 @@
                                     </div>
                                 </div>
 
+
+                                <hr>
+                                <h1 class="text-2xl text-red-500 text-center m-4">Legal Assistance and Case Closing </h1>
+                                <hr>
+                                <br>
+
+
                                 <div class="-mx-3 md:flex mb-3">
                                     <div class="md:w-1/2 px-3">
                                         <label class="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2" for="case_consular_access_date">
@@ -426,7 +433,7 @@
 
                                         <div class="md:w-1/2 px-3">
                                             <label class="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2" for="grid-cnic">
-                                                CNIC/NICOB
+                                                CNIC/NICOP
                                             </label>
                                             <input name="cnic"   placeholder="XXXXX-XXXXXXX-X" maxlength="15" class="cnic_mask appearance-none block w-full bg-grey-lighter text-grey-darker border border-red rounded py-3 px-4 mb-3" id="grid-cnic" type="text">
                                         </div>

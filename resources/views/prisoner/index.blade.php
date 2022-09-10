@@ -112,9 +112,10 @@
 
                 table, td, th {
                     border: 1px solid;
-                    padding-left: 10px;
-                    padding-right: 2px;
-                    padding-top: 5px;
+                    padding-left: 5px;
+                    padding-right: 1px;
+                    padding-top: 1px;
+                    font-size: 10px;
                 }
 
                 table {
@@ -474,10 +475,10 @@
                 <br>
                 <br>
                 <br>
-                   <h2 style="text-align: center"> <span class="text-center"> Prisoner's Report<br>
+                   <h2 style="text-align: center; font-size: 12px;"> <span class="text-center"> Prisoner's Report<br>
                     Date: {{\Carbon\Carbon::now()->format('d-m-Y')}}
                    </h2>
-                <p> Search Criteria <br>
+                <p style="font-size: 12px;"> Search Criteria <br>
                     @if($search_string)
                         SEARCH: {{$search_string}} ,
                     @endif
@@ -553,10 +554,7 @@
                         <tr>
                             <td style="text-align: center">{{$loop->iteration}}</td>
                             <td>
-                                <a href="{{route('prisoner.show', $p->id)}}"
-                                   class="flex items-center text-blue-500 hover:underline">
-                                    <span>{{$p->name_and_father_name}}</span>
-                                </a>
+                                    {{$p->name_and_father_name}}
                             </td>
                             <td style="text-align: center;">
                                 {{$p->iqama_no}}
@@ -571,20 +569,18 @@
                                     @endforeach
                                 @endif
                             </td>
-                            <td style="text-align: center;">
-                                {{\Carbon\Carbon::parse($p->gregorian_detention_date)->format('d-m-Y')}}
-                                / {{$p->hijri_detention_date}}
+                            <td style="text-align: center;" width="10%">
+                                {{\Carbon\Carbon::parse($p->gregorian_detention_date)->format('d-m-Y')}} / {{$p->hijri_detention_date}}
                             </td>
                             <td style="text-align: center;">
 
-                                    <span class="text-red-500 font-bold">
+
                                     {{$p->case_closing_reason}}
                                         @if(!empty($p->case_closing_date_gg))
                                             on
                                             {{\Carbon\Carbon::parse($p->case_closing_date_gg)->format('d-m-Y')}}
                                         @endif
 
-                                    </span>
 
                                 {{$p->status}} <br>
                                 @if($p->sentence_in_years > 1)
@@ -605,7 +601,7 @@
                                     {{\Carbon\Carbon::parse($p->gregorian_detention_date)->diff(\Carbon\Carbon::now())->format('%y years, %m months and %d days')}}
                                 @endif
                             </td>
-                            <td style="text-align: center;">
+                            <td style="text-align: center;"  width="10%">
                                 @if(!empty($p->expected_release_date))
                                     {{\Carbon\Carbon::parse($p->expected_release_date)->format('d-m-Y')}}
                                 @endif
@@ -629,7 +625,7 @@
         </div>
 
         <div class=" print:hidden max-w-12xl mx-auto sm:px-4 lg:px-8">
-
+            {{ $prisoner->links() }}
             <div class="relative overflow-x-auto shadow-md ">
                 <table
                     class="w-full text-xs border-collapse border border-slate-400 text-left text-black dark:text-gray-400 print:hidden">

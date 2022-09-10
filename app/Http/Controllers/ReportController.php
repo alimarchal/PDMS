@@ -25,9 +25,6 @@ class ReportController extends Controller
                 $grand_total[$key] = 0;
             }
         }
-
-
-//        DB::enableQueryLog();
         $query_region_wise = DB::table('prisoners')
             ->select('prisons.region', 'prisons.jail', 'prisoner_charges.crime_charges', DB::raw("count(prisoner_charges.crime_charges) as total"))
             ->join('prisoner_charges', 'prisoners.id', '=', 'prisoner_charges.prisoner_id')

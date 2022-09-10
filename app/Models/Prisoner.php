@@ -136,6 +136,7 @@ class Prisoner extends Model
         'other',
         'status',
         'detention_place',
+        'all_charges',
     ];
 
     public function shifted_to_other_department()
