@@ -69,6 +69,33 @@ class Prisoner extends Model
         return $query->whereBetween('gregorian_detention_date', [$date_from, $date_to])->orWhereBetween('case_closing_date_gg', [$date_from, $date_to]);
     }
 
+    public function scopeExpectedReleaseDate(Builder $query, $search): Builder
+    {
+        $datetime1 = null;
+        $datetime2 = null;
+
+
+        if (isset($search) && !empty($search)) {
+            $dates = explode(' – ', $search);
+            $fdate = @$dates[0];
+            $tdate = @$dates[1];
+            if (!empty($fdate) && !empty($tdate)) {
+                $datetime1 = new \DateTime($fdate);
+                $datetime2 = new \DateTime($tdate);
+            }
+        }
+
+        $date_from = null;
+        $date_to = null;
+
+        if (!empty($search)) {
+            $date_from = $datetime1->format('Y-m-d');
+            $date_to = $datetime2->format('Y-m-d');
+        }
+
+        return $query->where('case_closed', 'No')->where('case_closing_reason', '!=', 'Deported')->whereBetween('expected_release_date', [$date_from, $date_to])->where('status', '!=', 'Released');
+    }
+
     public function scopeSearchReleased(Builder $query, $search): Builder
     {
         $dateS = Carbon::now()->subMonth(3);
@@ -348,6 +375,9 @@ class Prisoner extends Model
             'Security case' => 'قضية أمنية',
             'Traffic Accident' => 'حادث مروري',
             'Money Laundering' => 'غسيل الأموال',
+            'Cyber crime' => 'جرائم المعلوماتية',
+            'Violation of rules' => 'مخالفة الأنظمة',
+            'Assaulting and stabbing' => 'إعتداء بالطعن',
         ];
     }
 

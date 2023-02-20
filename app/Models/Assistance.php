@@ -35,4 +35,9 @@ class Assistance extends Model
     }
 
 
+    public function prisoner()
+    {
+        return $this->belongsTo(Prisoner::class);
+    }
+
 }

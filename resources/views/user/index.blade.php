@@ -11,7 +11,16 @@
         </h2>
 
         <div class="flex justify-center items-center float-right">
-
+            <a href="{{route('user.create')}}"
+               class="flex items-center px-4 py-2 text-gray-600 bg-white border rounded-lg focus:outline-none hover:bg-gray-100 transition-colors duration-200 transform dark:text-gray-200 dark:border-gray-200  dark:hover:bg-gray-700 ml-2"
+               title="Members List">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                     stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                          d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"></path>
+                </svg>
+                <span class="hidden md:inline-block ml-2">Add New User</span>
+            </a>
 
             <a href="javascript:;" id="toggle"
                class="flex items-center px-4 py-2 text-gray-600 bg-white border rounded-lg focus:outline-none hover:bg-gray-100 transition-colors duration-200 transform dark:text-gray-200 dark:border-gray-200  dark:hover:bg-gray-700 ml-2"
@@ -30,9 +39,9 @@
 
     <div class="max-w-7xl mx-auto mt-12 px-4 sm:px-6 lg:px-8" style="display: none" id="filters">
         <div class="rounded-xl p-4 bg-white shadow-lg">
-            <form action="{{route('assistance.index')}}">
+            <form action="">
                 <div class="mb-3 -mx-2 flex items-end">
-                    <div class="px-2 w-1/3">
+                    <div class="px-2 w-1/2">
                         <div>
                             <label class="font-bold text-sm mb-2 ml-1">Search</label>
                             <input name="filter[search_string]" value="" class="w-full px-3 py-2 mb-1 border-2
@@ -42,29 +51,19 @@
                         </div>
                     </div>
 
-
-                    <div class="px-2 w-1/3">
-                        <div>
-                            <label class="font-bold text-sm mb-2 ml-1">Prisoner ID</label>
-                            <input name="filter[prisoner_id]" value="" class="w-full px-3 py-2 mb-1 border-2
-                                border-gray-200 rounded-md focus:outline-none
-                                focus:border-indigo-500 transition-colors cursor-pointer"/>
-
-                        </div>
-                    </div>
-
-                    <div class="px-2 w-1/3">
+                    <div class="px-2 w-1/2">
                         <label class="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2"
                                for="prison">
-                            Legal / Counselor
+                            Prison
                         </label>
-                        <select name="filter[type]" id="prison"
+                        <select name="filter[prison]" id="prison"
                                 class=" form-select w-full px-3 py-2 mb-1 border-2
                                 border-gray-200 rounded-md focus:outline-none
                                 focus:border-indigo-500 transition-colors cursor-pointer">
                             <option value="" selected="">Please Select</option>
-                            <option value="Legal Assistance">Legal Assistance</option>
-                            <option value="Counselor Access">Counselor Access</option>
+                            @foreach(\App\Models\Prisoner::prisons() as $item => $value)
+                                <option value="{{$item}}">{{$item}} - {{$value}}</option>
+                            @endforeach
                         </select>
                     </div>
 
@@ -92,47 +91,24 @@
                     class="w-full text-xs border-collapse border border-slate-400 text-left text-black dark:text-gray-400">
                     <thead class="text-xs text-black uppercase bg-gray-50 dark:bg-gray-700 ">
                     <tr class="bg-gray-200 text-gray-600 uppercase text-xs leading-normal">
-                        <th class="py-3 px-6 text-left border border-black">date</th>
-                        <th class="py-3 px-6 text-left border border-black">Name/Father Name</th>
-                        <th class="py-3 px-6 text-left border border-black">Prisoner ID</th>
-                        <th class="py-3 px-6 text-center border border-black">Access type</th>
-                        <th class="py-3 px-6 text-center border border-black">description</th>
-                        <th class="py-3 px-6 text-center border border-black">Attachment</th>
+                        <th class="py-3 px-6 text-left border border-black">Name</th>
+                        <th class="py-3 px-6 text-left border border-black">Email</th>
+                        <th class="py-3 px-6 text-left border border-black">Role</th>
                         <th class="py-3 px-6 text-center border border-black">Actions</th>
                         {{--                        @endcanany--}}
                     </tr>
                     </thead>
                     <tbody class="text-black text-xs font-light">
-                    @foreach($prison as $p)
+                    @foreach($users as $p)
                         <tr class="border-b border-gray-200 bg-white text-black hover:bg-gray-100">
                             <td class="py-3 px-6 text-center border border-black ">
-                                    <span>{{$p->date}}</span>
-                            </td>
-
-                            <td class="py-3 px-6 text-left border border-black ">
-                                @if(!empty($p->prisoner))
-                                    {{$p->prisoner->name_and_father_name}}
-                                @endif
-                            </td>
-
-                            <td class="py-3 px-6 text-center border border-black ">
-                                <a href="{{route('prisoner.show', $p->prisoner_id)}}" class="text-blue-500 hover:underline">{{$p->prisoner_id}}</a>
+                                    <span>{{$p->name}}</span>
                             </td>
                             <td class="py-3 px-6 text-center border border-black ">
-                                {{$p->type}}
+                                {{$p->email}}
                             </td>
                             <td class="py-3 px-6 text-center border border-black ">
-                                {{$p->description}}
-                            </td>
-                            <td class="py-3 px-6 text-center border border-black ">
-                                @if(empty($p->attachment))
-                                    N/A
-                                @else
-                                    <a href="{{Storage::url($p->attachment)}}">
-                                        Attachment
-                                    </a>
-                                @endif
-
+                                {{ ucwords(strtolower($p->roles->pluck('name')[0])) }}
                             </td>
 
 
@@ -141,11 +117,19 @@
                             <td class="py-3 px-6 text-center border border-black ">
                                 <div class="flex item-center justify-center">
                                     {{--                                        @can('Update Employee')--}}
-
+                                    <div class="w-4 mr-2 transform hover:text-purple-500 hover:scale-110">
+                                        <a href="{{route('user.edit', $p->id)}}" class="text-blue-500 underline">
+                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                                 stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                      d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/>
+                                            </svg>
+                                        </a>
+                                    </div>
                                     {{--                                        @endcan--}}
                                     {{--                                        @can('Delete Employee')--}}
                                     <div class="w-4 mr-2 transform hover:text-purple-500 hover:scale-110">
-                                        <form action="{{route('assistance.destroy', $p->id)}}" method="post"
+                                        <form action="{{route('user.destroy', $p->id)}}" method="post"
                                               onSubmit="if(!confirm('Are you sure you want to delete?')){return false;}">
                                             @csrf
 
@@ -172,7 +156,7 @@
 
             </div>
             <br>
-            {{ $prison->links() }}
+            {{ $users->links() }}
         </div>
     </div>
 

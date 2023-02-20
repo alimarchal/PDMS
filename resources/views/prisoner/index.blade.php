@@ -64,16 +64,14 @@
 
             @media print {
                 #hideOnScreen {
-                    width: 800px;
+                    /*width: 800px;*/
                     background-color: white;
                     padding: 10px;
                     display: block;
                     /*border: 1px solid black;*/
                     margin: auto;
-                    height: 950px;
+                    /*height: 950px;*/
                 }
-
-
 
                 #one, #two, #three {
                     float: left;
@@ -115,7 +113,7 @@
                     padding-left: 5px;
                     padding-right: 1px;
                     padding-top: 1px;
-                    font-size: 10px;
+                    font-size: 14px;
                 }
 
                 table {
@@ -158,7 +156,7 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                           d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"/>
                 </svg>
-                <span class="hidden md:inline-block ml-2">Search Filters</span>
+                <span class="hidden md:inline-block ml-2" style="font-size: 14px;">Search Filters</span>
             </a>
 
 
@@ -239,37 +237,39 @@
     <div class="max-w-7xl mx-auto mt-12 px-4 sm:px-6 lg:px-8" style="display: none" id="filters">
         <div class="rounded-xl p-4 bg-white shadow-lg">
             <form action="">
-                <div class="mb-3 -mx-2 flex items-end">
-                    <div class="px-2 w-1/2">
-                        <div>
-                            <label class="font-bold text-sm mb-2 ml-1">Search</label>
-                            <input name="filter[search_string]" value="" class="w-full px-3 py-2 mb-1 border-2
+
+
+                <div class="flex flex-wrap overflow-hidden">
+
+                    <div class="w-full overflow-hidden lg:my-1 lg:px-1 lg:w-1/4 xl:my-1 xl:px-1 xl:w-1/4">
+                        <label class="font-bold text-sm mb-2 ml-1">Search</label>
+                        <input name="filter[search_string]" value="" class="w-full px-3 py-2 mb-1 border-2
                                 border-gray-200 rounded-md focus:outline-none
                                 focus:border-indigo-500 transition-colors cursor-pointer"/>
-
-                        </div>
                     </div>
-                    <div class="px-2 w-1/2">
+
+                    <div class="w-full overflow-hidden lg:my-1 lg:px-1 lg:w-1/4 xl:my-1 xl:px-1 xl:w-1/4">
                         <label class="font-bold text-sm mb-2 ml-1">CNIC</label>
                         <input name="filter[cnic]" value=""
                                class="w-full px-3 py-2 mb-1 border-2 border-gray-200 rounded-md focus:outline-none focus:border-indigo-500 transition-colors cursor-pointer"/>
+
                     </div>
-                    <div class="px-2 w-1/2">
+
+                    <div class="w-full overflow-hidden lg:my-1 lg:px-1 lg:w-1/4 xl:my-1 xl:px-1 xl:w-1/4">
                         <label class="font-bold text-sm mb-2 ml-1">PASSPORT NO</label>
                         <input name="filter[passport_no]" value=""
                                class="w-full px-3 py-2 mb-1 border-2 border-gray-200 rounded-md focus:outline-none focus:border-indigo-500 transition-colors cursor-pointer"/>
+
                     </div>
-                    <div class="px-2 w-1/2">
+
+                    <div class="w-full overflow-hidden lg:my-1 lg:px-1 lg:w-1/4 xl:my-1 xl:px-1 xl:w-1/4">
                         <label class="font-bold text-sm mb-2 ml-1">IQAMA NO</label>
                         <input name="filter[iqama_no]" value=""
                                class=" w-full px-3 py-2 mb-1 border-2 border-gray-200 rounded-md focus:outline-none focus:border-indigo-500 transition-colors cursor-pointer"/>
                     </div>
 
 
-                </div>
-
-                <div class="mb-3 -mx-2 flex items-end">
-                    <div class="md:w-1/2 px-3">
+                    <div class="w-full overflow-hidden lg:my-1 lg:px-1 lg:w-1/4 xl:my-1 xl:px-1 xl:w-1/4">
                         <label class="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2" for="detention_authority">
                             Detention authority
                         </label>
@@ -283,8 +283,7 @@
                         </select>
                     </div>
 
-
-                    <div class="md:w-1/2 px-3">
+                    <div class="w-full overflow-hidden lg:my-1 lg:px-1 lg:w-1/4 xl:my-1 xl:px-1 xl:w-1/4">
                         <label class="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2" for="region">
                             Region
                         </label>
@@ -292,14 +291,13 @@
                                 border-gray-200 rounded-md focus:outline-none
                                 focus:border-indigo-500 transition-colors cursor-pointer">
                             <option value="" selected="">Please Select</option>
-                            @foreach(\App\Models\Prisoner::regions() as $item => $value)
-                                <option value="{{$item}}">{{$item}} - {{$value}}</option>
+                            @foreach(\App\Models\Prison::groupBy('region')->get() as $item)
+                                <option value="{{$item->region}}">{{$item->region}}</option>
                             @endforeach
                         </select>
                     </div>
 
-
-                    <div class="md:w-1/2 px-3">
+                    <div class="w-full overflow-hidden lg:my-1 lg:px-1 lg:w-1/4 xl:my-1 xl:px-1 xl:w-1/4">
                         <label class="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2" for="detention_city">
                             Detention city
                         </label>
@@ -307,16 +305,13 @@
                                 border-gray-200 rounded-md focus:outline-none
                                 focus:border-indigo-500 transition-colors cursor-pointer">
                             <option value="" selected="">Please Select</option>
-                            @foreach(\App\Models\Prisoner::detention_city() as $item => $value)
-                                <option value="{{$item}}">{{$item}} - {{$value}}</option>
+                            @foreach(\App\Models\Prison::groupBy('detention_city')->get() as $item)
+                                <option value="{{$item->detention_city}}">{{$item->detention_city}}</option>
                             @endforeach
                         </select>
                     </div>
 
-
-
-
-                    <div class="md:w-1/2 px-3">
+                    <div class="w-full overflow-hidden lg:my-1 lg:px-1 lg:w-1/4 xl:my-1 xl:px-1 xl:w-1/4">
                         <label class="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2" for="prison">
                             Prison
                         </label>
@@ -324,17 +319,14 @@
                                 border-gray-200 rounded-md focus:outline-none
                                 focus:border-indigo-500 transition-colors cursor-pointer">
                             <option value="" selected="">Please Select</option>
-                            @foreach(\App\Models\Prisoner::prisons() as $item => $value)
-                                <option value="{{$item}}">{{$item}} - {{$value}}</option>
+                            @foreach(\App\Models\Prison::whereNotNull('jail')->groupBy('jail')->orderBy('prisons.jail','asc')->get() as $item)
+                                <option value="{{$item->jail}}">{{$item->jail}}</option>
                             @endforeach
                         </select>
                     </div>
 
 
-                </div>
-
-                <div class="mb-3 -mx-2 flex items-end">
-                    <div class="px-2 w-1/2">
+                    <div class="w-full overflow-hidden lg:my-1 lg:px-1 lg:w-1/4 xl:my-1 xl:px-1 xl:w-1/4">
                         <label class="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2"
                                for="status">
                             Prisoner Status
@@ -365,7 +357,8 @@
                             </option>
                         </select>
                     </div>
-                    <div class="px-2 w-1/2">
+
+                    <div class="w-full overflow-hidden lg:my-1 lg:px-1 lg:w-1/4 xl:my-1 xl:px-1 xl:w-1/4">
                         <label class="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2"
                                for="case_closing_reason">
                             Case Closing Reason
@@ -382,9 +375,9 @@
                             <option value="Unknown">Unknown</option>
                         </select>
 
-
                     </div>
-                    <div class="px-2 w-1/2">
+
+                    <div class="w-full overflow-hidden lg:my-1 lg:px-1 lg:w-1/4 xl:my-1 xl:px-1 xl:w-1/4">
                         <label class="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2"
                                for="case_closed">
                             Case Closed
@@ -397,33 +390,41 @@
                             <option value="Yes">Yes</option>
                             <option value="No">No</option>
                         </select>
-
-
                     </div>
 
-                    <div class="px-2 w-1/2">
+
+                    <div class="w-full overflow-hidden lg:my-1 lg:px-1 lg:w-1/4 xl:my-1 xl:px-1 xl:w-1/4">
+                        <label class="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2" for="expected_release_date">
+                            Expected Release Date Range (From - To)
+                        </label>
+
+                        <input type="search" readonly name="filter[expected_release_date]" id="expected_release_date"
+                               class="w-full px-3 py-2 mb-1 border-2 border-gray-200 rounded-md focus:outline-none focus:border-indigo-500 transition-colors cursor-pointer">
+                    </div>
+
+
+                    <div class="w-full overflow-hidden lg:my-1 lg:px-1 lg:w-1/4 xl:my-1 xl:px-1 xl:w-1/4">
                         <label class="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2" for="search_from">
                             Date Range (From - To)
                         </label>
 
                         <input type="search" readonly name="filter[search_from]" id="date_range" class="w-full px-3 py-2 mb-1 border-2 border-gray-200 rounded-md focus:outline-none focus:border-indigo-500 transition-colors cursor-pointer">
                     </div>
-                </div>
 
 
-
-                <div class="mb-3 -mx-2 flex items-end">
-                    <div class="md:w-1/2 px-3">
+                    <div class="w-full overflow-hidden lg:my-1 lg:px-1 lg:w-1/4 xl:my-1 xl:px-1 xl:w-1/4 mb-4">
                         <label class="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2" for="search_charges">
                             charges crime
                         </label>
-                        <select  style="width: 100%;" name="filter[search_charges]" id="search_charges" class="select2 appearance-none block w-full bg-grey-lighter text-grey-darker border border-red rounded py-3 px-4 mb-3">
+                        <select style="width: 100%;" multiple name="search_charges[]" id="search_charges" class="select2 appearance-none block w-full bg-grey-lighter text-grey-darker border border-red rounded py-3 px-4 mb-3">
                             <option value="">Please Select</option>
                             @foreach(\App\Models\Prisoner::crime_charges() as $item => $value)
                                 <option value="{{$item}}">{{$item}} - {{$value}}</option>
                             @endforeach
                         </select>
                     </div>
+
+
                 </div>
 
 
@@ -445,7 +446,7 @@
         <div style="margin: auto;font-size: 8px;" id="hideOnScreen">
             <div id="one">
                 <h1>Embassy of Pakistan Riyadh,<br>Saudi Arabia
-                <br>
+                    <br>
                     Community Welfare Wing
                 </h1>
             </div>
@@ -465,7 +466,6 @@
 
             @if($search_string || $cnic || $passport_no || $iqama_no || $status || $case_closing_reason || $case_closed || $search_date || $search_released || $search_expected || $detention_authority || $region || $detention_city || $prison || $search_from || $search_charges)
 
-
                 <br>
                 <br>
                 <br>
@@ -475,10 +475,10 @@
                 <br>
                 <br>
                 <br>
-                   <h2 style="text-align: center; font-size: 12px;"> <span class="text-center"> Prisoner's Report<br>
+                <h2 style="text-align: center; font-size: 14px;"> <span class="text-center"> Prisoner's Report<br>
                     Date: {{\Carbon\Carbon::now()->format('d-m-Y')}}
-                   </h2>
-                <p style="font-size: 12px;"> Search Criteria <br>
+                </h2>
+                <p style="font-size: 14px!important;"> Search Criteria <br>
                     @if($search_string)
                         SEARCH: {{$search_string}} ,
                     @endif
@@ -537,11 +537,11 @@
 
 
                 <table>
+                    <thead>
                     <tr>
                         <td style="text-align: center">#</td>
                         <td style="text-align: center;">Name</td>
-                        <td style="text-align: center;">Iqama</td>
-                        <td style="text-align: center;">Passport</td>
+                        <td style="text-align: center;">Iqama/Passport</td>
                         <td style="text-align: center; width: 50px;">Charges</td>
                         <td style="text-align: center;">Detention Date</td>
                         <td style="text-align: center;">Status</td>
@@ -550,16 +550,18 @@
                         <td style="text-align: center;">Financial claim</td>
                         <td style="text-align: center;">Prison</td>
                     </tr>
+                    </thead>
                     @foreach($prisoner_print as $p)
                         <tr>
                             <td style="text-align: center">{{$loop->iteration}}</td>
                             <td>
-                                    {{$p->name_and_father_name}}
+                                {{$p->name_and_father_name}}
                             </td>
                             <td style="text-align: center;">
                                 {{$p->iqama_no}}
-                            </td>
-                            <td style="text-align: center;">
+                                @if(!empty($p->iqama_no))
+                                    -
+                                @endif
                                 {{$p->passport_no}}
                             </td>
                             <td style="text-align: left;">
@@ -569,39 +571,44 @@
                                     @endforeach
                                 @endif
                             </td>
-                            <td style="text-align: center;" width="10%">
+                            <td style="text-align: center;">
                                 {{\Carbon\Carbon::parse($p->gregorian_detention_date)->format('d-m-Y')}} / {{$p->hijri_detention_date}}
                             </td>
                             <td style="text-align: center;">
 
 
+                                @if($p->case_closing_reason == "None")
+                                @else
                                     {{$p->case_closing_reason}}
-                                        @if(!empty($p->case_closing_date_gg))
-                                            on
-                                            {{\Carbon\Carbon::parse($p->case_closing_date_gg)->format('d-m-Y')}}
-                                        @endif
+                                @endif
+                                @if(!empty($p->case_closing_date_gg))
+                                    on<br>
+                                    {{\Carbon\Carbon::parse($p->case_closing_date_gg)->format('d-m-Y')}}
+                                @endif
 
 
                                 {{$p->status}} <br>
                                 @if($p->sentence_in_years > 1)
-                                    {{$p->sentence_in_years}} Years,
+                                    {{$p->sentence_in_years}}y,
                                 @else
-                                    {{$p->sentence_in_years}} Year,
+                                    {{$p->sentence_in_years}}y,
                                 @endif
 
 
                                 @if($p->sentence_in_months > 1)
-                                    {{$p->sentence_in_months}} Months
+                                    {{$p->sentence_in_months}}m
                                 @else
-                                    {{$p->sentence_in_months}} Month
+                                    {{$p->sentence_in_months}}m
+                                @endif
+
+                            </td>
+                            <td style="text-align: center;">
+
+                                @if(!empty($p->gregorian_detention_date))
+                                    {{\Carbon\Carbon::parse($p->gregorian_detention_date)->diff(\Carbon\Carbon::now())->format('%yy, %mm & %dd')}}
                                 @endif
                             </td>
                             <td style="text-align: center;">
-                                @if(!empty($p->gregorian_detention_date))
-                                    {{\Carbon\Carbon::parse($p->gregorian_detention_date)->diff(\Carbon\Carbon::now())->format('%y years, %m months and %d days')}}
-                                @endif
-                            </td>
-                            <td style="text-align: center;"  width="10%">
                                 @if(!empty($p->expected_release_date))
                                     {{\Carbon\Carbon::parse($p->expected_release_date)->format('d-m-Y')}}
                                 @endif
@@ -611,8 +618,7 @@
                             </td>
                             <td style="text-align: center;">
                                 @if(!empty(\App\Models\Prison::where('jail', $p->prison)->first()))
-                                    {{ \App\Models\Prison::where('jail', $p->prison)->first()->region }} -
-                                    {{ $p->prison }}
+                                    {{ $p->prison }} - {{ \App\Models\Prison::where('jail', $p->prison)->first()->region }}
                                 @else
                                     {{$p->prison}}
                                 @endif
@@ -620,6 +626,7 @@
                         </tr>
                     @endforeach
                 </table>
+
             @endif
 
         </div>
@@ -631,9 +638,9 @@
                     class="w-full text-xs border-collapse border border-slate-400 text-left text-black dark:text-gray-400 print:hidden">
                     <thead class="text-xs text-black uppercase bg-gray-50 dark:bg-gray-700 ">
                     <tr class="bg-gray-200 text-gray-600 uppercase text-xs leading-normal">
+                        <th class="py-3 px-6 text-left border border-black">#</th>
                         <th class="py-3 px-6 text-left border border-black">Name</th>
-                        <th class="py-3 px-6 text-center border border-black">Iqama</th>
-                        <th class="py-3 px-6 text-center border border-black">Passport</th>
+                        <th class="py-3 px-6 text-center border border-black">Iqama/Passport</th>
                         <th class="py-3 px-6 text-center border border-black">Charges/Case</th>
                         <th class="py-3 px-6 text-center border border-black">Detention Date</th>
                         <th class="py-3 px-6 text-center border border-black">Status</th>
@@ -648,7 +655,11 @@
                     </thead>
                     <tbody class="text-black text-xs font-light">
                     @foreach($prisoner as $p)
+
                         <tr class="border-b border-gray-200 bg-white text-black hover:bg-gray-100 print:hidden">
+                            <td class="text-center border border-black ">
+                                {{$loop->iteration}}
+                            </td>
                             <td class="py-3 px-6 text-center border border-black ">
                                 <a href="{{route('prisoner.show', $p->id)}}"
                                    class="flex items-center text-blue-500 hover:underline">
@@ -657,8 +668,9 @@
                             </td>
                             <td class="py-3 px-6 text-center border border-black ">
                                 {{$p->iqama_no}}
-                            </td>
-                            <td class="py-3 px-6 text-center border border-black ">
+                                @if(!empty($p->iqama_no))
+                                    -
+                                @endif
                                 {{$p->passport_no}}
                             </td>
                             <td class="py-3 px-6 text-left border border-black  break-words w-8">
@@ -677,34 +689,43 @@
 
                             <td class="py-3 px-6 text-center border border-black ">
 
-                                    <span class="text-red-500 font-bold">
-                                    {{$p->case_closing_reason}}
-                                        @if(!empty($p->case_closing_date_gg))
-                                            on
-                                            {{\Carbon\Carbon::parse($p->case_closing_date_gg)->format('d-m-Y')}}
-                                        @endif
+
+                                @if($p->shifted_to_other_department->isNotEmpty())
+                                    Shifted on {{\Carbon\Carbon::parse($p->shifted_to_other_department->last()->shifting_date_gregorian)->format('d-m-Y')}}
+                                @endif
+
+                                <span class="text-red-500 font-bold">
+                                    @if($p->case_closing_reason == "None")
+                                    @else
+                                        {{$p->case_closing_reason}}
+                                    @endif
+
+                                    @if(!empty($p->case_closing_date_gg))
+                                        on<br>
+                                        {{\Carbon\Carbon::parse($p->case_closing_date_gg)->format('d-m-Y')}}
+                                    @endif
 
                                     </span>
 
                                 {{$p->status}} <br>
                                 @if($p->sentence_in_years > 1)
-                                    {{$p->sentence_in_years}} Years,
+                                    {{$p->sentence_in_years}}y,
                                 @else
-                                    {{$p->sentence_in_years}} Year,
+                                    {{$p->sentence_in_years}}y,
                                 @endif
 
 
                                 @if($p->sentence_in_months > 1)
-                                    {{$p->sentence_in_months}} Months
+                                    {{$p->sentence_in_months}}m
                                 @else
-                                    {{$p->sentence_in_months}} Month
+                                    {{$p->sentence_in_months}}m
                                 @endif
                             </td>
 
 
                             <td class="py-3 px-6 text-center border border-black ">
                                 @if(!empty($p->gregorian_detention_date))
-                                    {{\Carbon\Carbon::parse($p->gregorian_detention_date)->diff(\Carbon\Carbon::now())->format('%y years, %m months and %d days')}}
+                                    {{\Carbon\Carbon::parse($p->gregorian_detention_date)->diff(\Carbon\Carbon::now())->format('%yy, %mm & %dd')}}
                                 @endif
                             </td>
 
@@ -722,12 +743,8 @@
 
                             <td class="py-3 px-6 text-center border border-black ">
 
-                                @if(!empty(\App\Models\Prison::where('jail', $p->prison)->first()))
-                                    {{ \App\Models\Prison::where('jail', $p->prison)->first()->region }} -
                                     {{ $p->prison }}
-                                @else
-                                    {{$p->prison}}
-                                @endif
+
                             </td>
 
                             {{--                            @canany(['Update Employee', 'Delete Employee'])--}}
@@ -816,6 +833,14 @@
         <script>
             $(document).ready(function () {
                 $("#date_range").daterangepicker({
+                    minDate: moment().subtract(10, 'years'),
+                    orientation: 'left',
+                    callback: function (startDate, endDate, period) {
+                        $(this).val(startDate.format('L') + ' – ' + endDate.format('L'));
+                    }
+                });
+
+                $("#expected_release_date").daterangepicker({
                     minDate: moment().subtract(10, 'years'),
                     orientation: 'left',
                     callback: function (startDate, endDate, period) {

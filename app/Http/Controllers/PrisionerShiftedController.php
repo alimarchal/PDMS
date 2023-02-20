@@ -40,9 +40,7 @@ class PrisionerShiftedController extends Controller
     public function store(StorePrisionerShiftedRequest $request)
     {
 
-
         $prisoner = $request->prisoner_id;
-
         if ($request->input('shifting_date_hijri')) {
             if (strlen($request->shifting_date_hijri) >= 10) {
                 $url = "http://api.aladhan.com/v1/hToG?date=" . Carbon::parse($request->shifting_date_hijri)->format('d-m-Y');
@@ -57,6 +55,7 @@ class PrisionerShiftedController extends Controller
             'prisoner_id' => $request->prisoner_id,
             'detention_authority' => $request->detention_authority,
             'detention_city' => $request->detention_city,
+            'detention_place' => $request->detention_place,
             'shifted_to_other_department' => $request->shifted_to_other_department,
             'shifting_date_hijri' => $request->shifting_date_hijri,
             'other_details' => $request->other_details,

@@ -28,8 +28,17 @@
 
                         <form action="{{route('prisionerShifted.store')}}" class="mb-6" method="post" enctype="multipart/form-data">
                             @csrf
+                            <input type="hidden" name="prisoner_id" value="{{$prisoner->id}}">
                             <div class="bg-white rounded px-8 pt-6 pb-8 ">
                                 <div class="-mx-3 md:flex mb-1">
+                                    <div class="md:w-1/2 px-3">
+                                        <label class="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2" for="shifting_date_hijri">
+                                            Shifting Date (Hijri Date)
+                                        </label>
+                                        <input name="shifting_date_hijri" placeholder="dd-mm-YYYY" min="10" required class="hdate appearance-none block w-full bg-grey-lighter text-grey-darker border border-red rounded py-3 px-4 mb-3"
+                                               id="shifting_date_hijri" type="text">
+                                    </div>
+
 
                                     <div class="md:w-1/2 px-3">
                                         <label class="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2" for="detention_authority">
@@ -41,6 +50,15 @@
                                                 <option value="{{$item}}">{{$item}} - {{$value}}</option>
                                             @endforeach
                                         </select>
+                                    </div>
+
+
+                                    <div class="md:w-1/2 px-3">
+                                        <label class="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2" for="grid-detention_place">
+                                            Detention Place
+                                        </label>
+                                        <input name="detention_place" class=" appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded py-3 px-4"
+                                               id="grid-detention_place" type="text">
                                     </div>
 
                                     <div class="md:w-1/2 px-3">
@@ -55,26 +73,6 @@
                                         </select>
                                     </div>
 
-                                    <div class="md:w-1/2 px-3">
-                                        <label class="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2" for="shifted_to_other_department">
-                                            shifted to other department
-                                        </label>
-                                        <input type="hidden" name="prisoner_id" value="{{$prisoner->id}}">
-                                        <select name="shifted_to_other_department" id="shifted_to_other_department" class="select2 appearance-none block w-full bg-grey-lighter text-grey-darker border border-red rounded py-3 px-4 mb-3">
-                                            <option value="" selected="">Please Select</option>
-                                            @foreach(\App\Models\Prisoner::prisons() as $key => $value)
-                                                <option value="{{$key}}">{{$key}} - {{$value}}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-
-                                    <div class="md:w-1/2 px-3">
-                                        <label class="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2" for="shifting_date_hijri">
-                                            Shifting Date (Hijri Date)
-                                        </label>
-                                        <input name="shifting_date_hijri" placeholder="dd-mm-YYYY" min="10" required class="hdate appearance-none block w-full bg-grey-lighter text-grey-darker border border-red rounded py-3 px-4 mb-3"
-                                               id="shifting_date_hijri" type="text">
-                                    </div>
 
                                 </div>
 

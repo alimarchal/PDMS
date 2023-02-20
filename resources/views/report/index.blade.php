@@ -11,16 +11,17 @@
             }
 
             @media print {
-                @page {size: landscape}
+                /*@page {size: landscape}*/
                 #hideOnScreen_1 {
-                    width: 800px;
+                    width: auto;
                     background-color: white;
-                    padding: 10px;
+                    /*padding: 10px;*/
                     display: block;
                     /*border: 1px solid black;*/
                     margin: auto;
-                    height: 950px;
+                    height: auto;
                 }
+
                 #one, #two, #three {
                     float: left;
                     width: 33.33%;
@@ -28,13 +29,13 @@
                 }
 
                 #one h1 {
-                    font-size: 18px;
+                    font-size: 16px;
                     text-align: center;
                     font-weight: bold;
                 }
 
                 #three h1 {
-                    font-size: 18px;
+                    font-size: 16px;
                     text-align: center;
                     font-weight: bold;
                 }
@@ -48,21 +49,16 @@
                 }
 
                 table {
-                    page-break-inside: auto
+                    /*page-break-inside: auto*/
                 }
 
                 tr {
-                    page-break-inside: avoid;
-                    page-break-after: auto
+                    /*page-break-inside: avoid;*/
+                    /*page-break-after: auto*/
                 }
-
                 table, td, th {
                     border: 1px solid;
-                    padding-left: 10px;
-                    padding-right: 2px;
-                    padding-top: 5px;
                 }
-
                 table {
                     width: 100%;
                     border-collapse: collapse;
@@ -77,7 +73,6 @@
         </h2>
 
         <div class="flex justify-center items-center float-right">
-
 
 
             <button onclick="window.print()"
@@ -138,90 +133,299 @@
     </div>
 
 
-        <div id="hideOnScreen" style="margin: auto;font-size: 11px;">
-            <div id="one">
-                <h1>Embassy of Pakistan Riyadh,<br>Saudi Arabia
-                    <br>
-                    Community Welfare Wing
-                </h1>
-            </div>
-            <div id="two" style="margin-bottom: 10px;">
-                <img src="{{Storage::url('logo.png')}}" style="height: 100px; display: block;margin-left: auto;margin-right: auto;" alt="">
-            </div>
-            <div id="three" style="direction: rtl;">
+    <div id="hideOnScreen" style="margin: auto;font-size: 11px;">
 
-                <h1>
-                    سفارت خانہ پاکستان ریاض،
-                    <br>
-                    سعودی عرب
-                    <br>
-                    شعبہ کمیونٹی ویلفیئر
-                </h1>
-            </div>
+        <div id="one">
+            <span style="font-weight: bold;">Print Date: {{date('d-M-Y')}}</span>
+            <h1>Embassy of Pakistan Riyadh,<br>Saudi Arabia
+                <br>
+                Community Welfare Wing
+            </h1>
+        </div>
+        <div id="two" style="margin-bottom: 10px;">
+            <img src="{{Storage::url('logo.png')}}" style="height: 100px; display: block;margin-left: auto;margin-right: auto;" alt="">
+        </div>
+        <div id="three" style="direction: rtl;">
+<br>
+            <h1>
+                سفارت خانہ پاکستان ریاض،
+                <br>
+                سعودی عرب
+                <br>
+                شعبہ کمیونٹی ویلفیئر
+            </h1>
+        </div>
+
+        <table>
+            <thead>
+            <tr>
+
+                <th scope="col" colspan="2">
+                    Grand Total: {{$total_grand_value}}
+                </th>
+
+                <th scope="col" colspan="25">
+                    Statistics of Pakistani prisoners in Saudi jails under consuler jurisdiction of Emassy of
+                    Pakistan Riyadh
+                </th>
+            </tr>
+            <tr>
+                <th scope="col" colspan="27">
+                    Crime Wise
+                </th>
+            </tr>
+
+            </thead>
+            <tbody>
+
+            <tr>
+                <th style="width: 150px">
+                    Region
+                </th>
+                <th style="width: 150px">
+                    Jail
+                </th>
+                @foreach(\App\Models\Prisoner::crime_charges() as $key => $value)
+
+                    <td style="font-size: 12px; height:150px; translate(25px, 51px) /* 45 is really 360 - 45 */ rotate(315deg); width: 30px; writing-mode: vertical-lr;white-space: nowrap; padding-left: 5px;">
+                        {{$key}}
+                    </td>
+
+                @endforeach
+                <td style="font-size: 12px; height:150px; translate(25px, 51px) /* 45 is really 360 - 45 */ rotate(315deg); width: 30px; writing-mode: vertical-lr;white-space: nowrap; padding-left: 5px;">
+                    Total
+                </td>
+                <td style="font-size: 12px; height:150px; translate(25px, 51px) /* 45 is really 360 - 45 */ rotate(315deg); width: 30px; writing-mode: vertical-lr;white-space: nowrap; padding-left: 5px;">
+                    Undertrial
+                </td>
+                <td style="font-size: 12px; height:150px; translate(25px, 51px) /* 45 is really 360 - 45 */ rotate(315deg); width: 30px; writing-mode: vertical-lr;white-space: nowrap; padding-left: 5px;">
+                    Sentenced
+                </td>
+            </tr>
 
 
+            @php
+                $print_t = 0;
+                $print_ut = 0;
+                $print_st = 0;
+            @endphp
+            @foreach($region_wise as $key => $value)
 
-            <table>
-                <thead>
+                @php $flag = true; @endphp
+                @foreach($value as $k => $v)
+                    <tr>
+                        @if($flag)
+                            <td rowspan="{{count($value)}}">{{$key}} </td>
+                        @endif
+                        @php $flag = false; @endphp
+                        <td>{{$k}}</td>
+                        @php $total = 0; @endphp
+                        @foreach(\App\Models\Prisoner::crime_charges() as $x => $y)
+                            <td style="text-align: center;">
+                                @if($v[$x] == 0)
+                                    -
+                                @else
+                                    {{$v[$x]}}
+                                @endif
+                            </td>
+                            @php $total = $total + $v[$x]; @endphp
+                        @endforeach
+                        <td style="text-align: center;">
+                            @if($total == 0)
+                                -
+                            @else
+                                {{$total}}
+                                @php
+                                    $print_t = $print_t + $total;
+                                @endphp
+                            @endif
+                        </td>
+                        <td style="text-align: center;">
+                            @if(\App\Models\Prisoner::where('status','Undertrial')->where('prisoners.case_closed', '=', 'No')->where('prison',$k)->count() == 0)
+                                -
+                            @else
+                                {{\App\Models\Prisoner::where('status','Undertrial')->where('prisoners.case_closed', '=', 'No')->where('prison',$k)->count()}}
+                                @php
+                                    $print_ut = $print_ut + \App\Models\Prisoner::where('status','Undertrial')->where('prisoners.case_closed', '=', 'No')->where('prison',$k)->count();
+                                @endphp
+                            @endif
+                        </td>
+                        <td style="text-align: center;">
+                            @if(\App\Models\Prisoner::where('status','Sentenced')->where('prisoners.case_closed', '=', 'No')->where('prison',$k)->count() == 0)
+                                -
+                            @else
+                                {{\App\Models\Prisoner::where('status','Sentenced')->where('prisoners.case_closed', '=', 'No')->where('prison',$k)->count()}}
+                                @php
+                                    $print_st = $print_st + \App\Models\Prisoner::where('status','Sentenced')->where('prisoners.case_closed', '=', 'No')->where('prison',$k)->count();
+                                @endphp
+                            @endif
+                        </td>
+                    </tr>
+
+                @endforeach
+
+            @endforeach
+
+
+            <tr style="text-align: center;">
+                <td colspan="2"  style="background-color: lightgray;">Total</td>
+                @foreach($grand_total as $a => $b)
+                    <td  style="background-color: lightgray;">
+                        @if($b == 0)
+                            -
+                        @else
+                            {{$b}}
+                        @endif
+
+                    </td>
+                @endforeach
+                <td style="background-color: lightgray;">
+                    @if($print_t == 0)
+                        -
+                    @else
+                        {{$print_t}}
+                    @endif
+
+                </td>
+                <td style="background-color: lightgray;">
+                    @if($print_ut == 0)
+                        -
+                    @else
+                        {{$print_ut}}
+                    @endif
+                </td>
+                <td style="background-color: lightgray;">
+                    @if($print_st == 0)
+                        -
+                    @else
+                        {{$print_st}}
+                    @endif
+
+                </td>
+            </tr>
+
+
+            </tbody>
+        </table>
+
+    </div>
+
+
+    <div class="py-12  print:hidden">
+        <div class=" print:hidden max-w-18xl mx-auto sm:px-4 lg:px-8">
+            <table class="w-full text-sm border-collapse border border-slate-400 text-left text-black dark:text-gray-400">
+                <thead class="text-xs text-black uppercase bg-gray-50 dark:bg-gray-700 ">
                 <tr>
-                    <th scope="col" colspan="24">
+                    <th scope="col" colspan="27" class="px-1 py-3 border border-black text-center">
                         Statistics of Pakistani prisoners in Saudi jails under consuler jurisdiction of Emassy of
                         Pakistan Riyadh
                     </th>
                 </tr>
                 <tr>
-                    <th scope="col" colspan="24" >
+                    <th scope="col" colspan="2" class="px-1 py-3 border border-black text-center" style="background-color: yellow;">
+                        Grand Total: {{$total_grand_value}}
+                    </th>
+                    <th scope="col" colspan="25" class="px-1 py-3 border border-black text-center">
                         Crime Wise
                     </th>
                 </tr>
                 </thead>
                 <tbody>
 
-                <tr>
-                    <th>
+                <tr class="bg-white border-b dark:bg-gray-800 dark:border-black text-center">
+                    <th class="border border-black text-black dark:text-white" style="width: 150px">
                         Region
                     </th>
-                    <th>
+                    <th
+                        class="border border-black font-bold dark:text-white" style="width: 150px">
                         Jail
                     </th>
                     @foreach(\App\Models\Prisoner::crime_charges() as $key => $value)
 
-                        <td style="font-size: 10px;transform: rotate(-90deg); text-align: center">
+                        <td class="border border-black font-bold " style="font-size: 12px; height:200px; translate(25px, 51px) /* 45 is really 360 - 45 */ rotate(315deg); width: 30px; writing-mode: vertical-lr;white-space: nowrap;">
                             {{$key}}
                         </td>
 
                     @endforeach
-                    <td>
+                    <td class="px-0  border border-black font-bold" style="background-color: yellow;font-size: 12px; height:200px; translate(25px, 51px) /* 45 is really 360 - 45 */ rotate(315deg); width: 30px; writing-mode: vertical-lr;white-space: nowrap;">
                         Total
                     </td>
-                    <td>
+                    <td class="px-0  border border-black font-bold" style="font-size: 12px; height:200px; translate(25px, 51px) /* 45 is really 360 - 45 */ rotate(315deg); width: 30px; writing-mode: vertical-lr;white-space: nowrap;">
                         Undertrial
                     </td>
-                    <td style="transform: rotate(-90deg);">
+                    <td class="px-0  border border-black font-bold" style="font-size: 12px; height:200px; translate(25px, 51px) /* 45 is really 360 - 45 */ rotate(315deg); width: 30px; writing-mode: vertical-lr;white-space: nowrap;">
                         Sentenced
                     </td>
                 </tr>
+
+
+                @php
+                    $total_total = 0;
+                    $undertrial_total = 0;
+                    $sentenced_total = 0;
+                @endphp
 
                 @foreach($region_wise as $key => $value)
 
                     @php $flag = true; @endphp
                     @foreach($value as $k => $v)
-                        <tr>
+                        <tr class="bg-white border-b dark:bg-gray-800 dark:border-black" >
+
+
                             @if($flag)
-                                <td rowspan="{{count($value)}}">{{$key}} </td>
+                                <td class="px-5 border border-black text-left" style="font-family: Arial" rowspan="{{count($value)}}">{{$key}}  </td>
                             @endif
                             @php $flag = false; @endphp
-                            <td >{{$k}}</td>
+                            <td class="px-2 py-2 border border-black text-left">{{$k}}</td>
                             @php $total = 0; @endphp
                             @foreach(\App\Models\Prisoner::crime_charges() as $x => $y)
-                                <td style="text-align: center;">{{$v[$x]}}</td>
+                                <td class="px-2 py-2 border border-black text-right" style="text-align: center">
+                                    @if($v[$x] == 0)
+                                        -
+                                    @else
+                                        {{$v[$x]}}
+                                    @endif
+
+                                </td>
                                 @php $total = $total + $v[$x]; @endphp
                             @endforeach
-                            <td style="text-align: center;">{{$total}}</td>
-                            <td style="text-align: center;">
-                                {{\App\Models\Prisoner::where('status','Undertrial')->where('prison',$k)->count()}}
+                            <td class="px-1 py-2 border border-black text-right" style="background-color: yellow; text-align: center;">
+                                @if($total == 0)
+                                    -
+                                @else
+                                    {{$total}}
+                                    @php
+                                        $total_total = $total_total + $total;
+                                    @endphp
+                                @endif
                             </td>
-                            <td style="text-align: center;">{{\App\Models\Prisoner::where('status','Sentenced')->where('prison',$k)->count()}}</td>
+                            <td class="px-2 py-2 border border-black text-right" style="text-align: center">
+
+
+
+                                @if(\App\Models\Prisoner::where('status','Undertrial')->where('prison',$k)->where('prisoners.case_closed', '=', 'No')->count() == 0)
+                                    -
+                                @else
+
+
+                                    {{\App\Models\Prisoner::where('status','Undertrial')->where('prisoners.case_closed', '=', 'No')->where('prison',$k)->count()}}
+                                    @php
+                                        $undertrial_total = $undertrial_total + \App\Models\Prisoner::where('status','Undertrial')->where('prisoners.case_closed', '=', 'No')->where('prison',$k)->count();
+                                    @endphp
+                                @endif
+
+
+                            </td>
+                            <td class="px-1 py-2 border border-black text-right" style="text-align: center">
+                                @if(\App\Models\Prisoner::where('status','Sentenced')->where('prisoners.case_closed', '=', 'No')->where('prison',$k)->count() == 0)
+                                    -
+                                @else
+                                    {{\App\Models\Prisoner::where('status','Sentenced')->where('prisoners.case_closed', '=', 'No')->where('prison',$k)->count()}}
+                                    @php
+                                        $sentenced_total = $sentenced_total + \App\Models\Prisoner::where('status','Sentenced')->where('prisoners.case_closed', '=', 'No')->where('prison',$k)->count();
+                                    @endphp
+                                @endif
+                            </td>
                         </tr>
 
                     @endforeach
@@ -229,113 +433,21 @@
                 @endforeach
 
 
-                <tr>
-                    <td  colspan="2">Total</td>
+                <tr class="text-center font-bold">
+                    <td class="px-2 py-2 border border-black" colspan="2" style="text-align:center;background-color: yellow;">Total</td>
                     @foreach($grand_total as $a => $b)
-                        <td>
+                        <td class="px-2 py-2 border border-black text-right" style="text-align:center;background-color: yellow;">
                             {{$b}}
                         </td>
                     @endforeach
-                    <td>0</td>
-                    <td>0</td>
-                    <td>0</td>
+                    <td class="px-2 py-2 border border-black text-right" style="text-align:center;background-color: yellow;">{{$total_total}}</td>
+                    <td class="px-2 py-2 border border-black text-right" style="text-align:center;background-color: yellow;">{{$undertrial_total}}</td>
+                    <td class="px-2 py-2 border border-black text-right" style="text-align:center;background-color: yellow;">{{$sentenced_total}}</td>
                 </tr>
 
 
                 </tbody>
             </table>
-
-        </div>
-
-
-        <div class="py-12  print:hidden">
-        <div class=" print:hidden max-w-18xl mx-auto sm:px-4 lg:px-8" >
-            <div class="relative overflow-x-auto shadow-md ">
-                <table class="w-full text-sm border-collapse border border-slate-400 text-left text-black dark:text-gray-400">
-                    <thead class="text-xs text-black uppercase bg-gray-50 dark:bg-gray-700 ">
-                    <tr>
-                        <th scope="col" colspan="24" class="px-1 py-3 border border-black text-center">
-                            Statistics of Pakistani prisoners in Saudi jails under consuler jurisdiction of Emassy of
-                            Pakistan Riyadh
-                        </th>
-                    </tr>
-                    <tr>
-                        <th scope="col" colspan="24" class="px-1 py-3 border border-black text-center">
-                            Crime Wise
-                        </th>
-                    </tr>
-                    </thead>
-                    <tbody>
-
-                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-black text-center">
-                        <th class="px-16 border border-black  py-2 font-medium text-black dark:text-white">
-                            Region
-                        </th>
-                        <th
-                            class="px-24  border border-black py-0 font-medium text-black dark:text-white">
-                            Jail
-                        </th>
-                        @foreach(\App\Models\Prisoner::crime_charges() as $key => $value)
-
-                                <td class=" py-3 px-2 border border-black font-bold " style="font-size: 12px; line-height: normal">
-                                    {{$key}}
-                                </td>
-
-                        @endforeach
-                        <td class="px-0  border border-black   -rotate-90 ">
-                            Total
-                        </td>
-                        <td class="px-0  border border-black   -rotate-90 ">
-                            Undertrial
-                        </td>
-                        <td class="px-0  border border-black   -rotate-90 ">
-                            Sentenced
-                        </td>
-                    </tr>
-
-                    @foreach($region_wise as $key => $value)
-
-                        @php $flag = true; @endphp
-                        @foreach($value as $k => $v)
-                            <tr class="bg-white border-b dark:bg-gray-800 dark:border-black">
-                                @if($flag)
-                                    <td class="px-5 border border-black text-left" style="font-family: Arial" rowspan="{{count($value)}}">{{$key}} </td>
-                                @endif
-                                @php $flag = false; @endphp
-                                <td class="px-2 py-2 border border-black text-left">{{$k}}</td>
-                                @php $total = 0; @endphp
-                                @foreach(\App\Models\Prisoner::crime_charges() as $x => $y)
-                                    <td class="px-2 py-2 border border-black text-right">{{$v[$x]}}</td>
-                                    @php $total = $total + $v[$x]; @endphp
-                                @endforeach
-                                <td class="px-1 py-2 border border-black text-right">{{$total}}</td>
-                                <td class="px-2 py-2 border border-black text-right">
-                                    {{\App\Models\Prisoner::where('status','Undertrial')->where('prison',$k)->count()}}
-                                </td>
-                                <td class="px-1 py-2 border border-black text-right">{{\App\Models\Prisoner::where('status','Sentenced')->where('prison',$k)->count()}}</td>
-                            </tr>
-
-                        @endforeach
-
-                    @endforeach
-
-
-                    <tr class="text-center font-bold">
-                        <td class="px-2 py-2 border border-black" colspan="2">Total</td>
-                        @foreach($grand_total as $a => $b)
-                            <td class="px-2 py-2 border border-black text-right">
-                                {{$b}}
-                            </td>
-                        @endforeach
-                        <td class="px-2 py-2 border border-black text-right">0</td>
-                        <td class="px-2 py-2 border border-black text-right">0</td>
-                        <td class="px-2 py-2 border border-black text-right">0</td>
-                    </tr>
-
-
-                    </tbody>
-                </table>
-            </div>
         </div>
     </div>
 

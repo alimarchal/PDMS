@@ -3,6 +3,9 @@
     @section('custom_css')
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noto+Nastaliq+Urdu">
         <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet"/>
+
+{{--        <script src = "https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js">--}}
+{{--        </script>--}}
     @endsection
 
     <x-slot name="header">
@@ -18,6 +21,8 @@
             <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
                 <div class="p-6 sm:px-10 bg-white border-b border-gray-200">
                     <div class="mt-6 text-gray-500">
+
+
                         @if ($errors->any())
                             @foreach ($errors->all() as $error)
                                 <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
@@ -45,10 +50,11 @@
                                         <input name="arabic_name" class="appearance-none block w-full bg-grey-lighter text-grey-darker border border-red rounded py-3 px-4 mb-3" id="grid-arabic_name" type="text">
                                     </div>
                                     <div class="md:w-1/2 px-3">
-                                        <label class="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2" for="grid-iqama_no">
+                                        <label class="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2" for="iqama_no">
                                             iqama no
                                         </label>
-                                        <input name="iqama_no" class="appearance-none block w-full bg-grey-lighter text-grey-darker border border-red rounded py-3 px-4 mb-3" id="grid-iqama_no" type="text">
+                                        <input name="iqama_no" id="iqama_no"  class="appearance-none block w-full bg-grey-lighter text-grey-darker border border-red rounded py-3 px-4 mb-3"  type="text">
+                                        <span id="referred_no_response_not_found" style="color: red;"></span>
                                     </div>
                                     <div class="md:w-1/2 px-3">
                                         <label class="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2" for="grid-passport_no">
@@ -89,8 +95,8 @@
                                         </label>
                                         <select name="prison" id="prison" class="select2 appearance-none block w-full bg-grey-lighter text-grey-darker border border-red rounded py-3 px-4 mb-3">
                                             <option value="" selected="">Please Select</option>
-                                            @foreach(\App\Models\Prisoner::prisons() as $item => $value)
-                                                <option value="{{$item}}">{{$item}} - {{$value}}</option>
+                                            @foreach(\App\Models\Prison::whereNotNull('jail')->groupBy('jail')->orderBy('prisons.jail','asc')->get() as $item)
+                                                <option value="{{$item->jail}}">{{$item->jail}}</option>
                                             @endforeach
                                         </select>
                                     </div>
@@ -114,8 +120,8 @@
                                         </label>
                                         <select name="detention_city" id="detention_city" class="select2 appearance-none block w-full bg-grey-lighter text-grey-darker border border-red rounded py-3 px-4 mb-3">
                                             <option value="" selected="">Please Select</option>
-                                            @foreach(\App\Models\Prisoner::detention_city() as $item => $value)
-                                                <option value="{{$item}}">{{$item}} - {{$value}}</option>
+                                            @foreach(\App\Models\Prison::groupBy('detention_city')->get() as $item)
+                                                <option value="{{$item->detention_city}}">{{$item->detention_city}}</option>
                                             @endforeach
                                         </select>
                                     </div>
@@ -151,20 +157,29 @@
                                         </select>
                                     </div>
 
+                                    <div class="md:w-1/2 px-3">
+                                        <label class="block uppercase resize rounded-md tracking-wide text-grey-darker text-xs font-bold mb-2" for="grid-case_details">
+                                            case details
+                                        </label>
+                                        <input type="text" name="case_details" id="grid-case_details" class="appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded py-3 px-4">
+
+                                    </div>
+
                                 </div>
 
 
 {{--                                <livewire:date-converter/>--}}
 
 
-                                <div class="-mx-3 md:flex mb-1">
-                                    <div class="w-full px-3" row="8">
-                                        <label class="block uppercase resize rounded-md tracking-wide text-grey-darker text-xs font-bold mb-2" for="grid-case_details">
-                                            case details
-                                        </label>
-                                        <textarea name="case_details" rows="5" class="appearance-none form-textarea w-full bg-grey-lighter text-grey-darker border border-red rounded py-3 px-4 mb-3" id="grid-case_details"></textarea>
-                                    </div>
-                                </div>
+{{--                                <div class="-mx-3 md:flex mb-1">--}}
+{{--                                    <div class="w-full px-3" row="8">--}}
+{{--                                        <label class="block uppercase resize rounded-md tracking-wide text-grey-darker text-xs font-bold mb-2" for="grid-case_details">--}}
+{{--                                            case details--}}
+{{--                                        </label>--}}
+{{--                                        <input type="text" name="case_details" id="grid-case_details" class="appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded py-3 px-4">--}}
+{{--                                        <textarea name="case_details" rows="5" class="appearance-none form-textarea w-full bg-grey-lighter text-grey-darker border border-red rounded py-3 px-4 mb-3" id="grid-case_details"></textarea>--}}
+{{--                                    </div>--}}
+{{--                                </div>--}}
 
 
 
@@ -292,8 +307,8 @@
                                         </label>
                                         <select name="case_city" id="case_city" class="select2 appearance-none block w-full bg-grey-lighter text-grey-darker border border-red rounded py-3 px-4 mb-3">
                                             <option value="" selected="">Please Select</option>
-                                            @foreach(\App\Models\Prisoner::detention_city() as $key => $value)
-                                                <option value="{{$key}}">{{$key}} - {{$value}}</option>
+                                            @foreach(\App\Models\Prison::groupBy('detention_city')->get() as $item)
+                                                <option value="{{$item->detention_city}}">{{$item->detention_city}}</option>
                                             @endforeach
                                         </select>
                                     </div>
@@ -395,7 +410,6 @@
                                             <option value="Executed">Executed</option>
                                             <option value="Unknown">Unknown</option>
                                             <option value="Shifted">Shifted</option>
-                                            <option value="Executed">Executed</option>
                                         </select>
                                     </div>
 
@@ -578,6 +592,46 @@
                     return false;
                 });
             });
+
+
+            $('#iqama_no').on('keyup', function () {
+                $value = $(this).val();
+                $.ajax({
+                    type: 'get',
+                    url: "{{ route('prisoner.ajaxRequest') }}",
+                    data: {'iqama_no': $value},
+                    success: function (response) {
+                        if (response.status === 0) {
+                            // alert('Iqama not found in database');
+                            console.log('not found');
+                            // $('#referred_no_response').empty();
+                            // $('#referred_no_response_not_found').html('Not record found');
+                        } else {
+
+                            var url = '{{ config('app.url') }}'  + '/prisoner/' +response.data.id + '/edit';
+                            let text = 'Duplicate record found against IQAMA ID ' +$value + "\nPrisoner Name: " + response.data.name_and_father_name
+                                        + '\nPress Ok to Redirect to editing or Cancel to Enter Duplicate'
+                            ;
+                            if (confirm(text) == true) {
+                                document.location.href = url; //relative to domain
+                            } else {
+                                text = "You canceled!";
+                            }
+
+
+
+
+                            {{--$(location).attr('href', {{route('prison.edit',2243)}});--}}
+                            // alert('Duplicate record found against Iqama ID ' +$value + "\nPrisoner Name: " + response.data.name_and_father_name)
+                            // $('#referred_no_response_not_found').html('Duplicate record found against this iqama id. UID:'+response.data.id );
+                            // $('#referred_no_response_not_found').empty();
+                            // $('#referred_no_response').html('Reference Verified: ' + response.data);
+                        }
+                    }
+                });
+            })
+
+
         </script>
     @endsection
 

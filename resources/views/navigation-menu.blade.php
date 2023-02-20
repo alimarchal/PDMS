@@ -34,6 +34,10 @@
                         {{ __('Reports') }}
                     </x-jet-nav-link>
 
+                    <x-jet-nav-link href="{{ route('user.index') }}" :active="request()->routeIs('user.*')">
+                        {{ __('Users') }}
+                    </x-jet-nav-link>
+
 
                 </div>
             </div>

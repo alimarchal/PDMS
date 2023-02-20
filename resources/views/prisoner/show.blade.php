@@ -196,6 +196,7 @@
                     <td>{{$prisoner->region}}</td>
                 </tr>
 
+
                 <tr>
                     <td>Detention City:</td>
                     <td>{{$prisoner->detention_city}}</td>
@@ -286,9 +287,59 @@
             </table>
 
             <br>
+            @if($prisoner->prisoner_shifting->isNotEmpty())
+                <table>
+
+
+                    <tr>
+                        <th colspan="6">Prisoner Shifting</th>
+                    </tr>
+                    @foreach($prisoner->prisoner_shifting as $ps)
+                        <tr>
+                            <td width="13%">Date GG:</td>
+                            <td>{{\Carbon\Carbon::parse($ps->shifting_date_gregorian)->format('d-m-Y')}}</td>
+                            <td>Date Hijri:</td>
+                            <td>{{$ps->shifting_date_hijri}}</td>
+                            <td>Det Authority:</td>
+                            <td>{{$ps->detention_authority}}</td>
+                        </tr>
+                        <tr>
+                            <td>Det Place:</td>
+                            <td>{{$ps->detention_place}}</td>
+                            <td>Det City:</td>
+                            <td>{{$ps->detention_city}}</td>
+                            <td>Other Details:</td>
+                            <td>{{$ps->other_details}}</td>
+                        </tr>
+                    @endforeach
+                </table>
+            @endif
+
+<br>
+
+            @if($prisoner->assistance->isNotEmpty())
+                <table>
+
+
+                    <tr>
+                        <th colspan="6">Prisoner Assistance</th>
+                    </tr>
+                    @foreach($prisoner->assistance as $ps)
+                        <tr>
+                            <td>DATE :</td>
+                            <td>{{\Carbon\Carbon::parse($ps->date)->format('d-m-Y')}}</td>
+                            <td width="13%">Type:</td>
+                            <td>{{$ps->type}} </td>
+                            <td>Description:</td>
+                            <td>{{$ps->description}}</td>
+                        </tr>
+                    @endforeach
+                </table>
+            @endif
+
+            <br>
             Note: <br><br>
             <hr style="border: 1px solid black; ">
-            <hr style="border: 1px solid black; margin-top: 50px; ">
             <hr style="border: 1px solid black; margin-top: 50px; ">
             <hr style="border: 1px solid black; margin-top: 50px; ">
             <hr style="border: 1px solid black; margin-top: 50px; ">
@@ -627,11 +678,13 @@
                                         @if($prisoner->prisoner_shifting->isNotEmpty())
                                             @foreach($prisoner->prisoner_shifting as $ps)
                                                 <li>
-                                                    <div class="">{{ucwords(strtolower('DETENTION AUTHORITY'))}}: {{$ps->shifted_to_other_department}}</div>
-                                                    <div class="">{{ucwords(strtolower('DETENTION CITY'))}}: {{$ps->shifted_to_other_department}}</div>
-                                                    <div class="">Shifted To Other Department: {{$ps->shifted_to_other_department}}</div>
                                                     <div class="text-gray-500">Shifting Date Gregorian: {{\Carbon\Carbon::parse($ps->shifting_date_gregorian)->format('d-m-Y')}}</div>
                                                     <div class="text-gray-500">Shifting Date Hijri: {{$ps->shifting_date_hijri}}</div>
+                                                    <div class="">{{ucwords(strtolower('DETENTION AUTHORITY'))}}: {{$ps->shifted_to_other_department}}</div>
+                                                    <div class="">{{ucwords(strtolower('DETENTION Place'))}}: {{$ps->detention_place}}</div>
+                                                    <div class="">{{ucwords(strtolower('DETENTION CITY'))}}: {{$ps->shifted_to_other_department}}</div>
+                                                    <div class="">{{ucwords(strtolower('other details'))}}: {{$ps->other_details}}</div>
+
                                                 </li>
                                                 <hr>
                                             @endforeach

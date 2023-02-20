@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('passport_no')->nullable();
             $table->string('detention_authority')->nullable();
             $table->string('region')->nullable();
+            $table->string('detention_place')->nullable();
             $table->string('detention_city')->nullable();
             $table->string('prison')->nullable();
             $table->string('gender')->nullable();
@@ -61,6 +62,7 @@ return new class extends Migration
             $table->string('iqama')->nullable();
             $table->string('other')->nullable();
             $table->string('attachment')->nullable();
+            $table->string('all_charges')->nullable();
             $table->timestamps();
         });
     }

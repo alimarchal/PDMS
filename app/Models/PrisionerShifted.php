@@ -12,6 +12,7 @@ class PrisionerShifted extends Model
     public $fillable = [
         'prisoner_id',
         'shifted_to_other_department',
+        'detention_place',
         'shifting_date_gregorian',
         'detention_authority',
         'detention_city',

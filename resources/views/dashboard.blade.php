@@ -453,7 +453,7 @@
 
                 },
                 title: {
-                    text: 'Delay after completion of sentence',
+                    text: 'Delay after completion of sentence - {{$total_delayed}}',
                     align: 'left',
                     margin: 0,
                     offsetX: 0,
@@ -489,7 +489,7 @@
 
 
             var scale_options = {
-                series: [@foreach($total_prisoners_security_case as $key => $value) {{$value}}, @endforeach],
+                series: [@foreach($security_cases as $key => $value) {{$value}}, @endforeach],
                 dataLabels: {
                     formatter: function (val, opts) {
                         return opts.w.config.series[opts.seriesIndex]
@@ -536,12 +536,12 @@
                 theme: {
                     palette: 'palette3' // upto palette10
                 },
-                labels: [@foreach($total_prisoners_security_case as $key => $value) '{{$key}}', @endforeach],
+                labels: [@foreach($security_cases as $key => $value) '{{$key}}', @endforeach],
                 legend: {
                     position: 'bottom',
                 },
                 title: {
-                    text: 'Security Cases',
+                    text: 'Security Cases: {{$total_sc_cases}}',
                     align: 'left',
                     margin: 0,
                     offsetX: 0,

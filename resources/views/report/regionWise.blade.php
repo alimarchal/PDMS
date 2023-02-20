@@ -66,7 +66,7 @@
                 <table class="w-full text-sm border-collapse border border-slate-400 text-left text-black dark:text-gray-400">
                     <thead class="text-black uppercase bg-gray-50 dark:bg-gray-700 ">
                     <tr>
-                        <th scope="col" class="px-1 py-3 border border-black text-center " colspan="5">
+                        <th scope="col" class="px-1 py-3 border border-black text-center " colspan="6">
                             Date: {{\Carbon\Carbon::now()->format('d-m-Y')}}
                         </th>
                     </tr>
@@ -83,6 +83,10 @@
                         <th scope="col" class="px-1 py-3 border border-black  text-center" width="10%">
                             Undertrail
                         </th>
+
+                        <th scope="col" class="px-1 py-3 border border-black  text-center" width="10%">
+                            Death Sentenced
+                        </th>
                         <th scope="col" class="px-1 py-3 border border-black  text-center" width="5%">
                             Total
                         </th>
@@ -95,6 +99,7 @@
                         $i = 1;
                         $sentenced = 0;
                         $undertrial = 0;
+                        $Death_Sentenced = 0;
                     @endphp
                     @foreach($region_wise as $key => $value)
                         <tr class="bg-white  border-b dark:bg-gray-800 dark:border-black text-left">
@@ -108,6 +113,7 @@
                                 {{$key}}
                             </th>
                             <td class="border px-2 py-2 border-black py-0 font-medium text-black dark:text-white text-center">
+
                                     {{$value['Sentenced']}}
                                     @php $sentenced = $sentenced + $value['Sentenced']; @endphp
                             </td>
@@ -115,6 +121,11 @@
                             <td class="border px-2 py-2 border-black py-0 font-medium text-black dark:text-white text-center">
                                     {{$value['Undertrial']}}
                                     @php $undertrial = $undertrial + $value['Undertrial']; @endphp
+                            </td>
+
+                            <td class="border px-2 py-2 border-black py-0 font-medium text-black dark:text-white text-center">
+                                {{$value['Death Sentenced']}}
+                                @php $Death_Sentenced = $Death_Sentenced + $value['Death Sentenced']; @endphp
                             </td>
 
                             <td class="border px-2 py-2 border-black py-0 font-medium text-black dark:text-white text-center">
@@ -133,8 +144,12 @@
                         <th class="border px-2 py-2  border-black font-medium text-black dark:text-white text-center font-bold" >
                             {{$undertrial}}
                         </th>
+
                         <th class="border px-2 py-2  border-black font-medium text-black dark:text-white text-center font-bold" >
-                            {{number_format($sentenced+$undertrial,0)}}
+                            {{$Death_Sentenced}}
+                        </th>
+                        <th class="border px-2 py-2  border-black font-medium text-black dark:text-white text-center font-bold" >
+                            {{number_format($sentenced+$undertrial+$Death_Sentenced,0)}}
                         </th>
 
 

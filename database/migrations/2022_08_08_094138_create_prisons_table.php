@@ -17,6 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string('region')->nullable();
             $table->string('jail')->nullable();
+            $table->string('detention_city')->nullable();
             $table->timestamps();
         });
     }

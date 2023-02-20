@@ -4,6 +4,7 @@ namespace App\Exports;
 
 use App\Models\Prison;
 use App\Models\Prisoner;
+use Carbon\Carbon;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
@@ -50,7 +51,7 @@ class PrisonersExport implements FromCollection, WithHeadings, ShouldAutoSize
 
 
 
-        return QueryBuilder::for(Prisoner::class)
+        $prisoners =  QueryBuilder::for(Prisoner::class)
             ->allowedIncludes(['prisoner_charges'])
             ->with('prisoner_charges')
             ->allowedFilters([
@@ -92,6 +93,14 @@ class PrisonersExport implements FromCollection, WithHeadings, ShouldAutoSize
                 'etd_issuance_date', 'etd_number', 'case_closed', 'case_closing_reason', 'case_closing_date_hijri', 'case_closing_date_gg',
                 'date_of_birth', 'provinces', 'district', 'tehseel', 'muhallah_town', 'contact_no_in_pakistan',
             ]);
+
+        return $prisoners->map(function ($p) {
+            $detentionPeriod = Carbon::parse($p->gregorian_detention_date)->diff(Carbon::now())->format('%yy, %mm & %dd');
+            $p->detention_period = $detentionPeriod;
+            return $p;
+        });
+
+
     }
 
 

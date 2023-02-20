@@ -96,8 +96,8 @@
                                         </label>
                                         <select name="region" id="region" class="select2 appearance-none block w-full bg-grey-lighter text-grey-darker border border-red rounded py-3 px-4 mb-3">
                                             <option value="" selected="">Please Select</option>
-                                            @foreach(\App\Models\Prisoner::regions() as $item => $value)
-                                                <option value="{{$item}}"  @if($prisoner->region == $item) selected @endif  >{{$item}} - {{$value}}</option>
+                                            @foreach(\App\Models\Prison::groupBy('region')->get() as $item)
+                                                <option value="{{$item->region}}"  @if($prisoner->region == $item->region) selected @endif  >{{$item->region}}</option>
                                             @endforeach
                                         </select>
                                     </div>
@@ -109,8 +109,8 @@
                                         </label>
                                         <select name="detention_city" id="detention_city" class="select2 appearance-none block w-full bg-grey-lighter text-grey-darker border border-red rounded py-3 px-4 mb-3">
                                             <option value="" selected="">Please Select</option>
-                                            @foreach(\App\Models\Prisoner::detention_city() as $item => $value)
-                                                <option value="{{$item}}"  @if($prisoner->detention_city == $item) selected @endif  >{{$item}} - {{$value}}</option>
+                                            @foreach(\App\Models\Prison::groupBy('detention_city')->get() as $item)
+                                                <option value="{{$item->detention_city}}"  @if($prisoner->detention_city == $item->detention_city) selected @endif  >{{$item->detention_city}}</option>
                                             @endforeach
                                         </select>
                                     </div>
@@ -122,8 +122,8 @@
                                         </label>
                                         <select name="prison" id="prison" class="select2 appearance-none block w-full bg-grey-lighter text-grey-darker border border-red rounded py-3 px-4 mb-3">
                                             <option value="" selected="">Please Select</option>
-                                            @foreach(\App\Models\Prisoner::prisons() as $item => $value)
-                                                <option value="{{$item}}"  @if($prisoner->prison == $item) selected @endif  >{{$item}} - {{$value}}</option>
+                                            @foreach(\App\Models\Prison::whereNotNull('jail')->groupBy('jail')->orderBy('prisons.jail','asc')->get() as $item)
+                                                <option value="{{$item->jail}}"  @if($prisoner->prison == $item->jail) selected @endif  >{{$item->jail}}</option>
                                             @endforeach
                                         </select>
                                     </div>
@@ -189,7 +189,8 @@
                                         <label class="block uppercase resize rounded-md tracking-wide text-grey-darker text-xs font-bold mb-2" for="grid-case_details">
                                             case details
                                         </label>
-                                        <textarea name="case_details" rows="5" class="appearance-none form-textarea w-full bg-grey-lighter text-grey-darker border border-red rounded py-3 px-4 mb-3" id="grid-case_details">{{$prisoner->case_details}}</textarea>
+
+                                            <input type="text" name="case_details" id="grid-case_details" class="appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded py-3 px-4" value="{{$prisoner->case_details}}">
                                     </div>
                                 </div>
 
@@ -388,6 +389,7 @@
                                             <option value="Released" @if($prisoner->case_closing_reason == "Released") selected @endif >Released</option>
                                             <option value="Executed" @if($prisoner->case_closing_reason == "Executed") selected @endif >Executed</option>
                                             <option value="Unknown" @if($prisoner->case_closing_reason == "Unknown") selected @endif >Unknown</option>
+                                            <option value="Shifted"  @if($prisoner->case_closing_reason == "Shifted") selected @endif >Shifted</option>
                                         </select>
                                     </div>
 
