@@ -24,8 +24,8 @@ class ReportController extends Controller
             foreach (Prisoner::crime_charges() as $key => $value) {
                 if (!empty($item->jail)) {
                     $region_wise[$item->region][$item->jail][$key] = 0;
-                    $region_wise['Riyadh']['NotSet'][$key] = 0;
-                    $region_wise['NotSet']['NotSet'][$key] = 0;
+//                    $region_wise['Riyadh']['NotSet'][$key] = 0;
+//                    $region_wise['NotSet']['NotSet'][$key] = 0;
                     $grand_total[$key] = 0;
                 }
 
@@ -33,21 +33,11 @@ class ReportController extends Controller
         }
 
 
-//        dd($region_wise);
-
-//        $query_region_wise = DB::table('prisoners')
-//            ->select('prisons.region', 'prisons.jail', 'prisoner_charges.crime_charges', DB::raw('COUNT(DISTINCT prisoner_charges.prisoner_id) AS total'))
-//            ->join('prisoner_charges', 'prisoners.id', '=', 'prisoner_charges.prisoner_id')
-//            ->join('prisons', 'prisoners.prison', '=', 'prisons.jail')
-//            ->whereIn('prisoners.status', ['Undertrial', 'Sentenced'])
-//            ->where('prisoners.case_closed', '=', 'No')
-//            ->groupBy('prisoners.region', 'prisoners.prison')
-//            ->get();
-
         $query_region_wise = DB::table('prisoners')
             ->select('region', 'prison', 'prisoner_charges.crime_charges', DB::raw('COUNT(DISTINCT prisoner_charges.prisoner_id) as total'))
             ->join('prisoner_charges', 'prisoners.id', '=', 'prisoner_charges.prisoner_id')
-            ->whereIn('prisoners.status', ['Undertrial', 'Sentenced'])
+            ->whereIn('prisoners.status', ['Undertrial', 'Sentenced','Death Sentenced'])
+            ->whereNotNull('prisoners.prison')
             ->where('prisoners.case_closed', '=', 'No')
             ->groupBy('region', 'prison')
             ->get();
@@ -58,18 +48,20 @@ class ReportController extends Controller
 
 
         foreach ($query_region_wise as $item) {
-            if ($item->region == null) {
-                if ($item->region == null && $item->prison == null) {
-                    $region_wise['NotSet']['NotSet'][$item->crime_charges] = $item->total;
-                }
-            } else {
-                if ($item->prison == null) {
-                    $region_wise['Riyadh']['NotSet'][$item->crime_charges] = $item->total;
-                } else {
+//            if ($item->region == null) {
+//                if ($item->region == null && $item->prison == null) {
+//                    $region_wise['NotSet']['NotSet'][$item->crime_charges] = $item->total;
+//                }
+//            } else {
+//                if ($item->prison == null) {
+//                    $region_wise['Riyadh']['NotSet'][$item->crime_charges] = $item->total;
+//                } else {
+//
+//                    $region_wise[$item->region][$item->prison][$item->crime_charges] = $item->total;
+//                }
+//            }
 
-                    $region_wise[$item->region][$item->prison][$item->crime_charges] = $item->total;
-                }
-            }
+            $region_wise[$item->region][$item->prison][$item->crime_charges] = $item->total;
             $grand_total[$item->crime_charges] = $query_region_wise->where('crime_charges', $item->crime_charges)->sum('total');
         }
 
@@ -96,7 +88,7 @@ class ReportController extends Controller
         $query = DB::table(DB::raw('(SELECT prisoner_charges.crime_charges,
         COUNT(DISTINCT prisoner_charges.prisoner_id) AS total FROM prisoner_charges
         INNER JOIN prisoners ON prisoner_charges.prisoner_id = prisoners.id WHERE
-        prisoners.status IN("Undertrial", "Sentenced", "Death Sentenced") AND prisoners.case_closed = "No"
+        prisoners.status IN("Undertrial", "Sentenced", "Death Sentenced") AND prisoners.case_closed = "No" AND prisoners.prison is not null
         GROUP BY prisoner_charges.prisoner_id) as x'))
             ->select('crime_charges', DB::raw('count(total) as total'))
             ->groupBy('crime_charges')
@@ -121,26 +113,30 @@ class ReportController extends Controller
     public function prisonWise()
     {
         $prison_wise = [];
-        foreach (Prisoner::prisons() as $key => $value) {
-            $prison_wise[$key] = 0;
+        foreach (Prison::whereNotNull('jail')->get() as $item) {
+            $prison_wise[$item->jail] = 0;
         }
 
-        $prison_wise['NotSet'] = 0;
+//        $prison_wise['NotSet'] = 0;
 
         $query = DB::table('prisoners')
             ->select('prison', DB::raw('count(*) as prisoners'))
             ->whereIn('status', ['Undertrial', 'Sentenced', 'Death Sentenced'])
             ->where('case_closed', '=', 'No')
+            ->whereNotNull('prison')
             ->groupBy('prison')
             ->get();
 
 
+//        dd($prison_wise);
+
         foreach ($query as $item) {
-            if ($item->prison == null) {
-                $prison_wise['NotSet'] = $item->prisoners;
-            } else {
-                $prison_wise[$item->prison] = $item->prisoners;
-            }
+//            if ($item->prison == null) {
+//                $prison_wise['NotSet'] = $item->prisoners;
+//            } else {
+//                $prison_wise[$item->prison] = $item->prisoners;
+//            }
+            $prison_wise[$item->prison] = $item->prisoners;
         }
 
 //        dd($prison_wise);
@@ -157,9 +153,9 @@ class ReportController extends Controller
             $region_wise[$item->region]['Undertrial'] = 0;
             $region_wise[$item->region]['Sentenced'] = 0;
             $region_wise[$item->region]['Death Sentenced'] = 0;
-            $region_wise['NotSet']['Undertrial'] = 0;
-            $region_wise['NotSet']['Sentenced'] = 0;
-            $region_wise['NotSet']['Death Sentenced'] = 0;
+//            $region_wise['NotSet']['Undertrial'] = 0;
+//            $region_wise['NotSet']['Sentenced'] = 0;
+//            $region_wise['NotSet']['Death Sentenced'] = 0;
         }
 
 //        dd($region_wise);
@@ -168,14 +164,17 @@ class ReportController extends Controller
             ->select('region', 'status', DB::raw('count(*) as total'))
             ->whereIn('status', ['Undertrial', 'Sentenced', 'Death Sentenced'])
             ->where('case_closed', '=', 'No')
+            ->whereNotNull('prison')
             ->groupBy('region', 'status')
             ->get();
         foreach ($query as $item) {
-            if ($item->region == null) {
-                $region_wise['NotSet'][$item->status] = $item->total;
-            } else {
-                $region_wise[$item->region][$item->status] = $item->total;
-            }
+//            if ($item->region == null) {
+//                $region_wise['NotSet'][$item->status] = $item->total;
+//            } else {
+//                $region_wise[$item->region][$item->status] = $item->total;
+//            }
+
+            $region_wise[$item->region][$item->status] = $item->total;
         }
 
         $total = $query->sum('total');

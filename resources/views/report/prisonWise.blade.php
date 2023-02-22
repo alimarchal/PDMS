@@ -47,7 +47,11 @@
                     @foreach($prison_wise as $key => $value)
                         <tr class="bg-white  border-b dark:bg-gray-800 dark:border-black text-left">
                             <th class="border px-2 py-2  border-black font-medium text-black dark:text-white">
-                                {{$key}}
+                                {{$key}} - ({{\App\Models\Prison::where('jail', $key)->first()->region}})
+
+
+
+
                             </th>
                             <th class="border px-2 py-2 border-black py-0 font-medium text-black dark:text-white text-center">
                                 {{$value}}
