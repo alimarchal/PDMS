@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\CrimeCharges;
 use App\Models\Prison;
 use App\Models\Prisoner;
 use Illuminate\Http\Request;
@@ -19,56 +20,38 @@ class ReportController extends Controller
     {
         $region_wise = [];
         $grand_total = [];
-
         foreach (Prison::orderBy('sequence')->orderBy('jail', 'ASC')->where('status', 1)->get() as $item) {
-            foreach (Prisoner::crime_charges() as $key => $value) {
+            foreach (CrimeCharges::all() as $item_2) {
                 if (!empty($item->jail)) {
-                    $region_wise[$item->region][$item->jail][$key] = 0;
-//                    $region_wise['Riyadh']['NotSet'][$key] = 0;
-//                    $region_wise['NotSet']['NotSet'][$key] = 0;
-                    $grand_total[$key] = 0;
+                    $region_wise[$item->region][$item->jail][$item_2->name] = 0;
+                    $grand_total[$item_2->name] = 0;
                 }
-
             }
         }
 
-
+//        DB::enableQueryLog();
         $query_region_wise = DB::table('prisoners')
-            ->select('region', 'prison', 'prisoner_charges.crime_charges', DB::raw('COUNT(DISTINCT prisoner_charges.prisoner_id) as total'))
-            ->join('prisoner_charges', 'prisoners.id', '=', 'prisoner_charges.prisoner_id')
-            ->whereIn('prisoners.status', ['Undertrial', 'Sentenced','Death Sentenced'])
+            ->select('prisoners.region', 'prisoners.prison', 'prisoner_charges.crime_charges', DB::raw('COUNT(prisoner_charges.prisoner_id) AS total'))
+            ->join(DB::raw('(SELECT MAX(id) AS id, prisoner_id FROM prisoner_charges GROUP BY prisoner_id) AS latest_charges'), 'prisoners.id', '=', 'latest_charges.prisoner_id')
+            ->join('prisoner_charges', function($join) {
+                $join->on('latest_charges.id', '=', 'prisoner_charges.id');
+            })
+            ->whereIn('prisoners.status', ['Undertrial', 'Sentenced', 'Death Sentenced'])
             ->whereNotNull('prisoners.prison')
             ->where('prisoners.case_closed', '=', 'No')
-            ->groupBy('region', 'prison')
+            ->groupBy('prisoners.region', 'prisoners.prison', 'prisoner_charges.crime_charges')
+            ->orderBy('total', 'ASC')
             ->get();
 
 
 
-//        dd($query_region_wise->sum('total'));
-
-
+//        dd(DB::getQueryLog());
         foreach ($query_region_wise as $item) {
-//            if ($item->region == null) {
-//                if ($item->region == null && $item->prison == null) {
-//                    $region_wise['NotSet']['NotSet'][$item->crime_charges] = $item->total;
-//                }
-//            } else {
-//                if ($item->prison == null) {
-//                    $region_wise['Riyadh']['NotSet'][$item->crime_charges] = $item->total;
-//                } else {
-//
-//                    $region_wise[$item->region][$item->prison][$item->crime_charges] = $item->total;
-//                }
-//            }
-
+//            echo $item->region . " | " . $item->prison . " | " . $item->crime_charges . " | " . $item->total . "<br>";
             $region_wise[$item->region][$item->prison][$item->crime_charges] = $item->total;
             $grand_total[$item->crime_charges] = $query_region_wise->where('crime_charges', $item->crime_charges)->sum('total');
         }
-
-//        dd($query_region_wise->sum('total'));
-
         $total_grand_value = $query_region_wise->sum('total');
-
         return view('report.index', compact('region_wise', 'grand_total', 'total_grand_value'));
 
     }

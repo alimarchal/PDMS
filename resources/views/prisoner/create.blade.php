@@ -151,8 +151,8 @@
                                             charges crime
                                         </label>
                                         <select name="crime_charges[]" multiple id="crime_charges" class="select2 appearance-none block w-full bg-grey-lighter text-grey-darker border border-red rounded py-3 px-4 mb-3" required="">
-                                            @foreach(\App\Models\Prisoner::crime_charges() as $item => $value)
-                                                <option value="{{$item}}">{{$item}} - {{$value}}</option>
+                                            @foreach(\App\Models\CrimeCharges::all() as $item)
+                                                <option value="{{$item->name}}">{{$item->name}}</option>
                                             @endforeach
                                         </select>
                                     </div>

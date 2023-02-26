@@ -167,17 +167,28 @@
                                             charges crime
                                         </label>
                                         <select name="crime_charges[]" multiple id="crime_charges" class="select2 appearance-none block w-full bg-grey-lighter text-grey-darker border border-red rounded py-3 px-4 mb-3" required="">
-                                            @foreach(\App\Models\Prisoner::crime_charges() as $item => $value)
+                                            @foreach(\App\Models\CrimeCharges::all() as $item)
                                                 <option value="{{$item}}"
-                                                    @if($prisoner->prisoner_charges->isNotEmpty())
-                                                    @foreach($prisoner->prisoner_charges as $ch)
-                                                        @if($ch->crime_charges == $item)
-                                                            selected
+                                                        @if($prisoner->prisoner_charges->isNotEmpty())
+                                                            @foreach($prisoner->prisoner_charges as $ch)
+                                                                @if($ch->crime_charges == $item->name)
+                                                                    selected
+                                                                @endif
+                                                             @endforeach
                                                         @endif
-                                                    @endforeach
-                                                    @endif
-                                                >{{$item}} - {{$value}}</option>
+                                                >{{$item->name}}</option>
                                             @endforeach
+{{--                                            @foreach(\App\Models\Prisoner::crime_charges() as $item => $value)--}}
+{{--                                                <option value="{{$item}}"--}}
+{{--                                                    @if($prisoner->prisoner_charges->isNotEmpty())--}}
+{{--                                                    @foreach($prisoner->prisoner_charges as $ch)--}}
+{{--                                                        @if($ch->crime_charges == $item)--}}
+{{--                                                            selected--}}
+{{--                                                        @endif--}}
+{{--                                                    @endforeach--}}
+{{--                                                    @endif--}}
+{{--                                                >{{$item}} - {{$value}}</option>--}}
+{{--                                            @endforeach--}}
                                         </select>
                                     </div>
                                 </div>

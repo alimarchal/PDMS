@@ -28,21 +28,6 @@ class PrisonerController extends Controller
     public function dashboard()
     {
 
-//        $count = 0;
-//        $prisoners = Prisoner::whereRaw('detention_city is not null')->get();
-////        dd($prisoners);
-//        foreach($prisoners as $p)
-//        {
-//            $prison = Prison::where('detention_city', $p->detention_city)->first();
-//            $p->detention_city = $prison->detention_city;
-//            $p->region = $prison->region;
-//            $p->prison = $prison->jail;
-//            $p->save();
-//            $count++;
-//        }
-//
-//
-//        dd('Done: ' . $count);
         $total_prisoners = [];
         $total_prisoners_region_wise = [];
         $total_prisoners_crime_wise = [];
@@ -70,7 +55,9 @@ class PrisonerController extends Controller
         }
 
         $query_total_prisoners = DB::table('prisoners')->select('status', DB::raw("COUNT(DISTINCT prisoners.id) as total"))
-            ->whereIn('status', ['Undertrial', 'Sentenced', 'Death Sentenced'])->where('case_closed', 'No')
+            ->whereIn('prisoners.status', ['Undertrial', 'Sentenced', 'Death Sentenced'])
+            ->whereNotNull('prisoners.prison')
+            ->where('prisoners.case_closed', '=', 'No')
             ->groupBy('status')->get();
 
 //        dd($query_total_prisoners);
