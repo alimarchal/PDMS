@@ -29,7 +29,7 @@ class ReportController extends Controller
             }
         }
 
-//        DB::enableQueryLog();
+
         $query_region_wise = DB::table('prisoners')
             ->select('prisoners.region', 'prisoners.prison', 'prisoner_charges.crime_charges', DB::raw('COUNT(prisoner_charges.prisoner_id) AS total'))
             ->join(DB::raw('(SELECT MAX(id) AS id, prisoner_id FROM prisoner_charges GROUP BY prisoner_id) AS latest_charges'), 'prisoners.id', '=', 'latest_charges.prisoner_id')
@@ -44,14 +44,12 @@ class ReportController extends Controller
             ->get();
 
 
-
-//        dd(DB::getQueryLog());
         foreach ($query_region_wise as $item) {
-//            echo $item->region . " | " . $item->prison . " | " . $item->crime_charges . " | " . $item->total . "<br>";
             $region_wise[$item->region][$item->prison][$item->crime_charges] = $item->total;
             $grand_total[$item->crime_charges] = $query_region_wise->where('crime_charges', $item->crime_charges)->sum('total');
         }
         $total_grand_value = $query_region_wise->sum('total');
+//        dd($query_region_wise);
         return view('report.index', compact('region_wise', 'grand_total', 'total_grand_value'));
 
     }

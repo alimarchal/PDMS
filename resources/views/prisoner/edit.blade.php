@@ -166,9 +166,9 @@
                                         <label class="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2" for="crime_charges">
                                             charges crime
                                         </label>
-                                        <select name="crime_charges[]" multiple id="crime_charges" class="select2 appearance-none block w-full bg-grey-lighter text-grey-darker border border-red rounded py-3 px-4 mb-3" required="">
+                                        <select name="crime_charges[]"  id="crime_charges" class="select2 appearance-none block w-full bg-grey-lighter text-grey-darker border border-red rounded py-3 px-4 mb-3" required="">
                                             @foreach(\App\Models\CrimeCharges::all() as $item)
-                                                <option value="{{$item}}"
+                                                <option value="{{$item->name}}"
                                                         @if($prisoner->prisoner_charges->isNotEmpty())
                                                             @foreach($prisoner->prisoner_charges as $ch)
                                                                 @if($ch->crime_charges == $item->name)
@@ -178,17 +178,6 @@
                                                         @endif
                                                 >{{$item->name}}</option>
                                             @endforeach
-{{--                                            @foreach(\App\Models\Prisoner::crime_charges() as $item => $value)--}}
-{{--                                                <option value="{{$item}}"--}}
-{{--                                                    @if($prisoner->prisoner_charges->isNotEmpty())--}}
-{{--                                                    @foreach($prisoner->prisoner_charges as $ch)--}}
-{{--                                                        @if($ch->crime_charges == $item)--}}
-{{--                                                            selected--}}
-{{--                                                        @endif--}}
-{{--                                                    @endforeach--}}
-{{--                                                    @endif--}}
-{{--                                                >{{$item}} - {{$value}}</option>--}}
-{{--                                            @endforeach--}}
                                         </select>
                                     </div>
                                 </div>
